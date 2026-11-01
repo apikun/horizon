@@ -1,0 +1,17 @@
+[package]
+name = "horizon-android-log"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+rust-version = "1.90"
+description = "One line into Android's log buffer (adb logcat -s Horizon), the safe wrapper the game's log calls"
+
+# The game's log (horizon-client-render) forbids unsafe, so the raw
+# `__android_log_write` binding lives behind this crate's one safe function.
+# On the desktop the crate compiles to a no-op.
+
+[target.'cfg(target_os = "android")'.dependencies]
+android_log-sys = "0.3"
+
+[lints]
+workspace = true

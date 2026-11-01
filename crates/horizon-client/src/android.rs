@@ -59,6 +59,19 @@ pub fn entry(app: AndroidApp, files: std::path::PathBuf) {
         log::error!("Horizon: {error}");
         logging::flush();
         crash::report_error(&home, "client", &*error);
+        // The phone sees why instead of a silent close: the error, and where
+        // the log lives. Quit on the window ends the process.
+        let _ = crate::game::show_startup_error(
+            &game_dir,
+            "Horizon can't start",
+            &[
+                error.to_string(),
+                "If this keeps happening, send the log along: run adb logcat -s Horizon \
+                 while starting the app, or read files/home/logs/latest.log."
+                    .into(),
+            ],
+        );
+        logging::flush();
         std::process::exit(horizon_client::game::exit_code::ERROR);
     }
     logging::flush();

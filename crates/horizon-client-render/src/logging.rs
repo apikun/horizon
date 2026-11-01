@@ -437,6 +437,20 @@ impl Logger {
                 recent.push_back(line.clone());
             }
         }
+        // Android's log buffer beside the file: a phone has no terminal, and
+        // `adb logcat -s Horizon` is how a launch that never showed a window
+        // is debugged at all.
+        #[cfg(target_os = "android")]
+        {
+            let priority = match level {
+                log::Level::Error => horizon_android_log::ERROR,
+                log::Level::Warn => horizon_android_log::WARN,
+                _ => horizon_android_log::INFO,
+            };
+            for line in &lines {
+                horizon_android_log::write(priority, "Horizon", line);
+            }
+        }
         let msg = Out::Write {
             date: now.date_naive(),
             lines,

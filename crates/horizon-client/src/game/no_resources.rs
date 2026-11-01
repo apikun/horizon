@@ -4,7 +4,7 @@
 //! crash report: nothing went wrong in the game.
 use super::*;
 use horizon_client::no_resources::{Action, DOWNLOAD_URL, NoResources};
-use winit::event::MouseButton;
+use winit::event::{MouseButton, TouchPhase};
 
 struct Missing {
     window: Option<Arc<Window>>,
@@ -17,8 +17,22 @@ struct Missing {
     error: Option<Box<dyn std::error::Error>>,
 }
 
-/// Shows the screen until the player closes it.
+/// Shows the screen until the player closes it. (Android builds its own
+/// message instead: `show_screen` with `android_missing_files`' text.)
+#[cfg(not(target_os = "android"))]
 pub(super) fn show(looked_in: &std::path::Path, settings: &Settings) -> Result<()> {
+    show_screen(NoResources::new(looked_in), looked_in, settings)
+}
+
+/// The same window with another screen: Android's missing-files and
+/// startup-error screens, which carry their own message. `looked_in` is only
+/// the root the atlas reads from (empty when the files are missing, which is
+/// the point: the screen draws with the theme's bundled faces).
+pub(super) fn show_screen(
+    screen: NoResources,
+    looked_in: &std::path::Path,
+    settings: &Settings,
+) -> Result<()> {
     let mut app = Missing {
         window: None,
         renderer: None,
@@ -29,7 +43,7 @@ pub(super) fn show(looked_in: &std::path::Path, settings: &Settings) -> Result<(
                 pixels: [0u8; 4].repeat(6),
             }),
         },
-        screen: NoResources::new(looked_in),
+        screen,
         pointer: (0.0, 0.0),
         api: settings.horizon.api,
         error: None,
@@ -158,6 +172,16 @@ impl ApplicationHandler for Missing {
                 button: MouseButton::Left,
                 ..
             } => self.click(event_loop),
+            // A finger on the look surface: where the cursor is, and a lift
+            // is the click (no CursorMoved comes from a touch screen).
+            WindowEvent::Touch(touch) => {
+                self.pointer = (touch.location.x, touch.location.y);
+                if touch.phase == TouchPhase::Ended {
+                    self.click(event_loop);
+                } else {
+                    window.request_redraw();
+                }
+            }
             WindowEvent::KeyboardInput { event, .. }
                 if event.state == ElementState::Pressed
                     && event.physical_key == PhysicalKey::Code(KeyCode::Escape) =>

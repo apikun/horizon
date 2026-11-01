@@ -27,15 +27,34 @@ pub enum Action {
 }
 
 pub struct NoResources {
-    /// Where the prepared files were looked for, for whoever starts the game by hand on purpose.
-    looked_in: String,
+    title: String,
+    paragraphs: Vec<String>,
+    /// The Download button: the launcher's pitch. The startup-error screen
+    /// (Android) has no launcher to sell and only offers Quit.
+    download: bool,
+    /// The small print at the bottom.
+    footer: String,
 }
 
 impl NoResources {
     pub fn new(looked_in: &std::path::Path) -> Self {
         let shown = std::path::absolute(looked_in).unwrap_or_else(|_| looked_in.to_path_buf());
         Self {
-            looked_in: format!("No prepared game files in {}", shown.display()),
+            title: TITLE.into(),
+            paragraphs: PARAGRAPHS.iter().map(|p| p.to_string()).collect(),
+            download: true,
+            footer: format!("No prepared game files in {}", shown.display()),
+        }
+    }
+
+    /// The same layout with another story: Android's startup-error screen
+    /// (`android.rs` shows why the game did not start instead of closing).
+    pub fn error(title: &str, paragraphs: &[String], footer: String) -> Self {
+        Self {
+            title: title.to_owned(),
+            paragraphs: paragraphs.to_vec(),
+            download: false,
+            footer,
         }
     }
 
@@ -44,7 +63,8 @@ impl NoResources {
     fn layout(&self, ui: &Ui) -> Layout {
         let width = COLUMN.min(ui.w - 64.0).max(160.0);
         let x = ((ui.w - width) / 2.0).round();
-        let lines: Vec<Vec<String>> = PARAGRAPHS
+        let lines: Vec<Vec<String>> = self
+            .paragraphs
             .iter()
             .map(|p| wrap(ui, Face::Regular, BODY, p, width))
             .collect();
@@ -55,10 +75,15 @@ impl NoResources {
         let buttons_y = y + TITLE_LINE + 16.0 + text_h + 28.0;
         let mut buttons = Vec::new();
         let mut bx = x;
-        for (label, action) in [
-            ("Download the launcher", Action::Download),
-            ("Quit", Action::Quit),
-        ] {
+        let offered: &[(&str, Action)] = if self.download {
+            &[
+                ("Download the launcher", Action::Download),
+                ("Quit", Action::Quit),
+            ]
+        } else {
+            &[("Quit", Action::Quit)]
+        };
+        for &(label, action) in offered {
             let w = (ui.measure(Face::Medium, BUTTON_TEXT, label) + 40.0).round();
             buttons.push(Button {
                 label,
@@ -89,7 +114,7 @@ impl NoResources {
             layout.x,
             y,
             color::TEXT,
-            TITLE,
+            &self.title,
         );
         y += TITLE_LINE + 16.0;
         for paragraph in &layout.lines {
@@ -128,7 +153,7 @@ impl NoResources {
             ui,
             Face::Regular,
             ui_theme::SMALL,
-            &self.looked_in,
+            &self.footer,
             layout.width,
         )
         .iter()

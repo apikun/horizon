@@ -19138,6 +19138,61 @@ fn missing_resources(root: &std::path::Path) -> Option<String> {
     ))
 }
 
+/// Android's missing-files screen: a phone cannot run the desktop launcher,
+/// so the paragraphs say how the files get onto the device instead.
+#[cfg(target_os = "android")]
+fn android_missing_files(root: &std::path::Path) -> horizon_client::no_resources::NoResources {
+    horizon_client::no_resources::NoResources::error(
+        "Horizon needs its game files",
+        &[
+            "This app has none of Minecraft's files, and Horizon never ships them. It \
+             prepares its game files from your own Minecraft: Java Edition with the \
+             desktop launcher (playhorizon.dev)."
+                .into(),
+            "Copy the launcher's prepared folder (default .local/horizon-client/<version>) \
+             onto the device zipped as horizon-resources.zip, then:"
+                .into(),
+            "adb push horizon-resources.zip /data/local/tmp/ && adb shell run-as \
+             dev.playhorizon.android mkdir -p files/import && adb shell run-as \
+             dev.playhorizon.android cp /data/local/tmp/horizon-resources.zip \
+             files/import/"
+                .into(),
+            "Restart the app once: the bundle is unpacked into the game's files, and the \
+             game starts normally from then on."
+                .into(),
+        ],
+        format!(
+            "No prepared game files in {}",
+            std::path::absolute(root)
+                .unwrap_or_else(|_| root.to_path_buf())
+                .display()
+        ),
+    )
+}
+
+/// Android: a window that says why the game did not start (`android.rs` calls
+/// it before exiting, so a phone shows the reason instead of just closing).
+#[cfg(target_os = "android")]
+pub fn show_startup_error(
+    game_dir: &std::path::Path,
+    title: &str,
+    paragraphs: &[String],
+) -> Result<()> {
+    let settings = Settings::load(&game_dir.join("options.txt"));
+    no_resources::show_screen(
+        horizon_client::no_resources::NoResources::error(
+            title,
+            paragraphs,
+            "The log is in the app's files/home/logs/latest.log (adb shell run-as \
+             dev.playhorizon.android cat files/home/logs/latest.log), or run \
+             adb logcat -s Horizon"
+                .into(),
+        ),
+        game_dir,
+        &settings,
+    )
+}
+
 /// The ordinary launch: load the resources on a worker while the window shows
 /// the loading screen, then swap in the game on the main thread.
 fn run_loading(
@@ -19236,6 +19291,13 @@ pub fn run() -> Result<()> {
         if !options.offscreen && !synchronous_startup(&options) {
             log::error!("Horizon: {error}");
             let settings = Settings::load(&std::env::current_dir()?.join("options.txt"));
+            #[cfg(target_os = "android")]
+            return no_resources::show_screen(
+                android_missing_files(&vanilla_root),
+                &vanilla_root,
+                &settings,
+            );
+            #[cfg(not(target_os = "android"))]
             return no_resources::show(&vanilla_root, &settings);
         }
         return Err(error.into());
