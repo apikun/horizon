@@ -19139,26 +19139,33 @@ fn missing_resources(root: &std::path::Path) -> Option<String> {
 }
 
 /// Android's missing-files screen: a phone cannot run the desktop launcher,
-/// so the paragraphs say how the files get onto the device instead.
+/// so the paragraphs say how the files get onto the device instead. The
+/// placeholder texture pack ships in the APK and is already installed (the
+/// app says so, so a fresh install is not mistaken for a broken one); what
+/// a phone cannot make for itself is the game's data files.
 #[cfg(target_os = "android")]
 fn android_missing_files(root: &std::path::Path) -> horizon_client::no_resources::NoResources {
     horizon_client::no_resources::NoResources::error(
-        "Horizon needs its game files",
+        "Horizon needs the game's data files",
         &[
-            "This app has none of Minecraft's files, and Horizon never ships them. It \
-             prepares its game files from your own Minecraft: Java Edition with the \
-             desktop launcher (playhorizon.dev)."
+            "This app works, and its 8x8 placeholder textures are installed as a \
+             resource pack already. What it does not have is the game's data — the \
+             blocks, items, biomes and recipes Horizon prepares from your own \
+             Minecraft: Java Edition, which it never ships."
                 .into(),
-            "Copy the launcher's prepared folder (default .local/horizon-client/<version>) \
-             onto the device zipped as horizon-resources.zip, then:"
+            "On a computer, prepare the game files with the desktop launcher \
+             (playhorizon.dev), then copy the prepared folder (default \
+             .local/horizon-client/<version>) onto this device zipped as \
+             horizon-resources.zip:"
                 .into(),
             "adb push horizon-resources.zip /data/local/tmp/ && adb shell run-as \
              dev.playhorizon.android mkdir -p files/import && adb shell run-as \
              dev.playhorizon.android cp /data/local/tmp/horizon-resources.zip \
              files/import/"
                 .into(),
-            "Restart the app once: the bundle is unpacked into the game's files, and the \
-             game starts normally from then on."
+            "Restart the app once: the bundle is unpacked into the game's files, the \
+             placeholder textures apply on top, and the game starts normally from \
+             then on."
                 .into(),
         ],
         format!(

@@ -18,6 +18,11 @@ Prerequisites (once):
 start. Horizon ships none of Mojang's files: the zip is the player's own
 prepared data, and `android/app/src/main/assets/` is gitignored.
 
+The placeholder texture pack (`android/placeholder/8x8.zip`, no Mojang
+files) is copied into the assets as `placeholder-pack.zip` with every
+build: the app installs it as the game's first resource pack, so a
+fresh install draws with placeholder textures from the start.
+
 The APK lands in android/app/build/outputs/apk/<kind>/.
 """
 
@@ -30,6 +35,18 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 JNILIBS = ROOT / "android" / "app" / "src" / "main" / "jniLibs" / "arm64-v8a"
 SO_NAME = "libhorizon_android.so"
+PLACEHOLDER_PACK = ROOT / "android" / "placeholder" / "8x8.zip"
+
+
+def pack_placeholder_pack() -> None:
+    """Copies the placeholder texture pack into the APK's assets."""
+    if not PLACEHOLDER_PACK.is_file():
+        sys.exit(f"missing {PLACEHOLDER_PACK}: the placeholder pack is part of the repo")
+    assets = ROOT / "android" / "app" / "src" / "main" / "assets"
+    assets.mkdir(parents=True, exist_ok=True)
+    out = assets / "placeholder-pack.zip"
+    out.write_bytes(PLACEHOLDER_PACK.read_bytes())
+    print(f"placeholder pack: {out} ({out.stat().st_size} bytes)")
 
 
 def run(command: list[str], cwd: Path | None = None) -> None:
@@ -96,6 +113,7 @@ def main() -> None:
     parser.add_argument("--engine-only", action="store_true", help="skip Gradle")
     args = parser.parse_args()
     build_engine(args.release)
+    pack_placeholder_pack()
     if args.resources:
         pack_resources(args.resources)
     if not args.engine_only:

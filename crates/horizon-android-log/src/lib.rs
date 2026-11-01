@@ -14,7 +14,9 @@ pub fn write(priority: i32, tag: &str, message: &str) {
     use std::ffi::CString;
     let Ok(tag) = CString::new(tag) else { return };
     // NUL bytes would cut the line short; logcat shows the rest badly anyway.
-    let Ok(message) = CString::new(message.replace('\0', " ")) else { return };
+    let Ok(message) = CString::new(message.replace('\0', " ")) else {
+        return;
+    };
     // SAFETY: both arguments are valid NUL-terminated C strings, alive for
     // the duration of the call.
     unsafe {
