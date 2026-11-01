@@ -28,7 +28,7 @@ android {
             // the only cost is the debuggable flag on a game the owner
             // already has private storage access to.
             signingConfig = signingConfigs.getByName("debug")
-            debuggable = true
+            isDebuggable = true
         }
     }
 
