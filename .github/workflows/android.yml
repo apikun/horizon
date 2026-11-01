@@ -1,0 +1,54 @@
+# Builds the Android APK: the engine with cargo-ndk, then the APK with
+# Gradle, exactly like tools/build_android.py does locally. Run it from the
+# Actions tab (workflow_dispatch), or push a tag named android-* to also
+# publish the APK on that tag's release.
+name: android
+on:
+  workflow_dispatch:
+  push:
+    tags: ["android-*"]
+
+permissions:
+  contents: write
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.11"
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android
+
+      - uses: nttld/setup-ndk@v1
+        id: ndk
+        with:
+          ndk-version: r27c
+          add-to-path: false
+
+      - name: Build the APK
+        run: |
+          cargo install cargo-ndk --locked
+          python3 tools/build_android.py --release
+        env:
+          ANDROID_NDK_HOME: ${{ steps.ndk.outputs.ndk-path }}
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: horizon-android
+          path: android/app/build/outputs/apk/release/*.apk
+
+      - uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: android/app/build/outputs/apk/release/*.apk
