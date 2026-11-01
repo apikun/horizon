@@ -23,6 +23,7 @@ android {
         release {
             // Debug-signed so it installs without a keystore; sign it
             // properly before sharing (docs/android.md).
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 
