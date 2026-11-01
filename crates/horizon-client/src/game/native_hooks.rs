@@ -6,6 +6,31 @@
 //! Horizon's own HUD extras do, and keep a mod's settings where the
 //! WebAssembly mod of the same id kept them.
 //!
+//! API 71 adds drawing mod block entities on the client (`native_block_entity_submit`,
+//! vanilla's `BlockEntityRenderer.submit`, culled by `native_block_entity_render_bounding_box`,
+//! NeoForge's `getRenderBoundingBox`), with a pose stack (`BlockEntityDraw`) and the
+//! helpers `native_draw_quad`, `native_draw_cube` and `native_draw_block`.
+//!
+//! API 70 adds a mod block's own `canSurvive` (`native_can_survive`), and the blocks a mod plant
+//! can stand on (`native_may_place_on`, `VegetationBlock.mayPlaceOn`).
+//!
+//! API 69 adds a mod's own advancement criteria triggers (`native_trigger_criterion`,
+//! in `native_criteria.rs`).
+//!
+//! API 68 adds stack-dependent image tooltip components, measured with `native_tooltip_component` and rendered with `native_tooltip_component_draw`.
+//!
+//! API 67 adds dispenser item behaviours (`native_dispense_item`) and `native_dispense_default` for a plain drop.
+//!
+//! API 66 adds explosions for server mods (`native_explode`, in
+//! `native_explosions.rs`).
+//!
+//! API 65 adds native item component type registration (`native_component_types`) and opaque NBT component helpers.
+//!
+//! API 64 adds comparator output from a mod's block (`native_has_analog_output`,
+//! `native_analog_output`, and the helper `native_update_output_neighbors`).
+//!
+//! API 63 adds context-free tag lookups for server hooks (`native_server_block_in_tag`, `native_server_item_in_tag`).
+//!
 //! API 62 adds nicknames for server mods: `native_set_nickname` shows a name in place of a player's in chat and
 //! the Tab list (the real one on hover), and `native_text_allowed` asks the server's chat filter, in
 //! `native_server.rs`.
@@ -269,7 +294,7 @@ pub(super) use horizon_world::level::flags;
 /// The hook points' API version. The launcher reads this line from the
 /// source it builds; keep its form.
 #[allow(dead_code)]
-pub(crate) const NATIVE_HOOKS_API: u32 = 62;
+pub(crate) const NATIVE_HOOKS_API: u32 = 71;
 
 impl GameLevel<'_> {
     /// An authoritative server committed a changed state through `Level.setBlock`.
@@ -369,7 +394,7 @@ impl GameLevel<'_> {
     /// that comparators read (how full or far along it is, as a composter's
     /// level), so they ask `native_analog_output`. Asked from inside the
     /// level's update: answer from `state` alone. Authoritative servers only.
-    /// API @API:analog_output@.
+    /// API 64.
     #[inline(always)]
     pub(super) fn native_has_analog_output(&self, state: BlockStateId, output: &mut bool) {
         let _ = (state, output);
@@ -385,7 +410,7 @@ impl GameLevel<'_> {
     /// `native_update_output_neighbors`; a change of state through
     /// `native_set_block` or `native_set_block_property` (neighbour updates
     /// on) tells the comparators itself, as vanilla's `Level.setBlock` does.
-    /// Authoritative servers only. API @API:analog_output@.
+    /// Authoritative servers only. API 64.
     #[inline(always)]
     pub(super) fn native_analog_output(
         &self,
@@ -465,7 +490,7 @@ impl GameLevel<'_> {
     /// be in the world yet, so decide from `state`. Answer only for your own
     /// blocks: `Some(false)` refuses the spot, `Some(true)` allows it, and
     /// the block's own rule doesn't run. The level is read-only. Asked on
-    /// every shape update of such a block: keep it short. API @API:can_survive@.
+    /// every shape update of such a block: keep it short. API 70.
     #[inline(always)]
     pub(super) fn native_can_survive(
         &self,
@@ -483,7 +508,7 @@ impl GameLevel<'_> {
     /// such as a crop) can stand on. Its template's `canSurvive` asks it, so
     /// the plant is refused there and pops off when its ground changes to
     /// one it can't stand on. Answer only for your own blocks. The level is
-    /// read-only. API @API:can_survive@.
+    /// read-only. API 70.
     #[inline(always)]
     pub(super) fn native_may_place_on(
         &self,
@@ -1082,7 +1107,7 @@ impl Game<'_> {
     /// `native_draw_quad`, `native_draw_cube` and `native_draw_block` under
     /// `draw`'s pose stack, which starts at the block's lower north-west
     /// corner, in blocks; `draw` also has the partial tick, the game time and
-    /// the block's light. API @API:block_entity_submit@.
+    /// the block's light. API 71.
     pub(super) fn native_block_entity_submit(
         &self,
         pos: [i32; 3],
@@ -1099,7 +1124,7 @@ impl Game<'_> {
     /// as the block with a block of margin around it; widen it when your
     /// `native_block_entity_submit` draws further (a tall shaft, a beam), or
     /// set an infinite value for one never culled. Asked once a frame for each
-    /// within 64 blocks whose chunk is drawn. API @API:block_entity_submit@.
+    /// within 64 blocks whose chunk is drawn. API 71.
     pub(super) fn native_block_entity_render_bounding_box(
         &self,
         pos: [i32; 3],
@@ -1289,7 +1314,7 @@ impl Game<'_> {
     /// level event the dispenser plays with its smoke: 1000 the click, 1001 the
     /// fail sound (`OptionalDispenseItemBehavior` without success), or 0 for
     /// nothing at all (`DispenseItemBehavior.NOOP`). To drop one normally,
-    /// answer `(native_dispense_default(..), 1000)`. API @API:dispenser_behaviour@.
+    /// answer `(native_dispense_default(..), 1000)`. API 67.
     pub(super) fn native_dispense_item(
         &mut self,
         dimension: &str,
@@ -2081,7 +2106,7 @@ impl Game<'_> {
     /// beside it, or behind a conductor there, read it again
     /// (`Level.updateNeighbourForOutputSignal`). Acts on the level in place:
     /// false (and nothing happens) when `dimension` is another, or this
-    /// window isn't a server. API @API:analog_output@.
+    /// window isn't a server. API 64.
     pub(super) fn native_update_output_neighbors(
         &mut self,
         dimension: &str,

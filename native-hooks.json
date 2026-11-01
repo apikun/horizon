@@ -420,6 +420,59 @@
       "name": "item_bar",
       "version": 1,
       "target": "horizon_client::game::native_hooks::Game<'_>::native_item_bar"
+    },
+    {
+      "name": "has_analog_output",
+      "version": 1,
+      "target": "horizon_client::game::native_hooks::GameLevel<'_>::native_has_analog_output"
+    },
+    {
+      "name": "analog_output",
+      "version": 1,
+      "target": "horizon_client::game::native_hooks::GameLevel<'_>::native_analog_output"
+    },
+    {
+      "name": "component_types",
+      "version": 1,
+      "target": "horizon_client::game::native_hooks::Game<'_>::native_component_types"
+    },
+    {
+      "name": "dispense_item",
+      "version": 1,
+      "target": "horizon_client::game::native_hooks::Game<'_>::native_dispense_item",
+      "side": "server"
+    },
+    {
+      "name": "tooltip_component",
+      "version": 1,
+      "target": "horizon_client::game::native_hooks::Game<'_>::native_tooltip_component",
+      "side": "client"
+    },
+    {
+      "name": "tooltip_component_draw",
+      "version": 1,
+      "target": "horizon_client::game::native_hooks::Game<'_>::native_tooltip_component_draw",
+      "side": "client"
+    },
+    {
+      "name": "can_survive",
+      "version": 1,
+      "target": "horizon_client::game::native_hooks::GameLevel<'_>::native_can_survive"
+    },
+    {
+      "name": "may_place_on",
+      "version": 1,
+      "target": "horizon_client::game::native_hooks::GameLevel<'_>::native_may_place_on"
+    },
+    {
+      "name": "block_entity_submit",
+      "version": 1,
+      "target": "horizon_client::game::native_hooks::Game<'_>::native_block_entity_submit"
+    },
+    {
+      "name": "block_entity_render_bounding_box",
+      "version": 1,
+      "target": "horizon_client::game::native_hooks::Game<'_>::native_block_entity_render_bounding_box"
     }
   ]
 }
