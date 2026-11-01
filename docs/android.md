@@ -34,7 +34,7 @@ arm64, and a GPU with working Vulkan (or GLES 3) drivers.
 Once:
 
 ```sh
-cargo install cargo-ndk --locked
+cargo install cargo-ndk --locked --version 4.1.2
 rustup target add aarch64-linux-android
 # ANDROID_NDK_HOME points at an NDK r27+; a Java 21 JDK and an Android SDK
 # (command-line tools suffice) for the packaging; a `gradle` 8.11+ on PATH.

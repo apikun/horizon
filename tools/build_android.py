@@ -6,7 +6,7 @@
     python3 tools/build_android.py --resources DIR   # also pack prepared resources
 
 Prerequisites (once):
-    cargo install cargo-ndk --locked
+    cargo install cargo-ndk --locked --version 4.1.2 --version 4.1.2 --version 4.1.2
     rustup target add aarch64-linux-android
     ANDROID_NDK_HOME pointing at an NDK (r27 or newer), and either the
     Gradle wrapper or a `gradle` on the PATH (8.11 or newer), with an
@@ -43,9 +43,13 @@ def build_engine(release: bool) -> Path:
     # horizon-client's codegen volume otherwise exhausts 4 GiB machines
     # (see the profile.fast.package comment in Cargo.toml).
     profile = "fast" if release else "debug"
+    # cargo-ndk 4 has no subcommands: `-P` is the API level and every
+    # argument it does not recognize rides through to cargo in order, so
+    # the package selector belongs after `build`. (cargo-ndk 3 spelled
+    # the platform flag `-p` and took a subcommand; don't mix them up.)
     run([
-        "cargo", "ndk", "-t", "arm64-v8a", "-p", "horizon-android",
-        "build", *(["--profile", "fast"] if release else []),
+        "cargo", "ndk", "-t", "arm64-v8a", "-P", "31",
+        "build", "-p", "horizon-android", *(["--profile", "fast"] if release else []),
     ], cwd=ROOT)
     so = ROOT / "target" / "aarch64-linux-android" / profile / SO_NAME
     if not so.is_file():

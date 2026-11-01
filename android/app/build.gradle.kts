@@ -22,8 +22,13 @@ android {
     buildTypes {
         release {
             // Debug-signed so it installs without a keystore; sign it
-            // properly before sharing (docs/android.md).
+            // properly before sharing (docs/android.md). Debuggable so
+            // `adb shell run-as` can reach files/ and import resources
+            // into a CI-built APK (docs/android.md, "Import folder") —
+            // the only cost is the debuggable flag on a game the owner
+            // already has private storage access to.
             signingConfig = signingConfigs.getByName("debug")
+            debuggable = true
         }
     }
 

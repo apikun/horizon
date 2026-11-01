@@ -41,7 +41,7 @@ jobs:
         # horizon-android-v0.1.0-arm64.apk) and hash it like the
         # upstream releases do.
         run: |
-          cargo install cargo-ndk --locked
+          cargo install cargo-ndk --locked --version 4.1.2
           python3 tools/build_android.py --release
           cp android/app/build/outputs/apk/release/*.apk "horizon-${GITHUB_REF_NAME}-arm64.apk"
           sha256sum "horizon-${GITHUB_REF_NAME}-arm64.apk" > SHA256SUMS
