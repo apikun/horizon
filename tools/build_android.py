@@ -38,10 +38,14 @@ def run(command: list[str], cwd: Path | None = None) -> None:
 
 
 def build_engine(release: bool) -> Path:
-    profile = "release" if release else "debug"
+    # The optimized APK builds with the `fast` profile: like release it runs
+    # at opt-level 3 with thin LTO off, but with more codegen units —
+    # horizon-client's codegen volume otherwise exhausts 4 GiB machines
+    # (see the profile.fast.package comment in Cargo.toml).
+    profile = "fast" if release else "debug"
     run([
         "cargo", "ndk", "-t", "arm64-v8a", "-p", "horizon-android",
-        "build", *(["--release"] if release else []),
+        "build", *(["--profile", "fast"] if release else []),
     ], cwd=ROOT)
     so = ROOT / "target" / "aarch64-linux-android" / profile / SO_NAME
     if not so.is_file():

@@ -81,3 +81,11 @@ inherits = "release"
 lto = false
 codegen-units = 16
 incremental = true
+
+# horizon-client's codegen volume exhausts a 4 GiB machine under any LLVM
+# optimization (rustc peaks past 3.5 GiB even at opt-level 1 and is killed;
+# unoptimized codegen fits). The Android build uses this profile
+# (tools/build_android.py), so it builds where CI runners and laptops do;
+# machines with headroom still get the full release profile.
+[profile.fast.package.horizon-client]
+opt-level = 0
