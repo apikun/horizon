@@ -1,7 +1,7 @@
 DedicatedServer.readCodeOfConducts	missing		player: with enable-code-of-conduct=true a joining player gets no code of conduct; the codeofconduct folder is never read
 DedicatedServer.setEnforceWhitelist	skip:server		JSON-RPC management API only (ServerSettingsService); Horizon has no such API
 DedicatedServer.setUsingWhitelist	port	crates/horizon-client/src/game/dedicated.rs::Game::console_whitelist	console whitelist on|off; store_property writes white-list back
-DedicatedServer.saveAllChunks	port	crates/horizon-client/src/game.rs::Game::save_game	gap: minor: no save notifications to the JSON-RPC management API
+DedicatedServer.saveAllChunks	port	crates/horizon-client/src/game/mod.rs::Game::save_game	gap: minor: no save notifications to the JSON-RPC management API
 DedicatedServer.sendLowDiskSpaceWarning	missing		minor: admin-level players get no low disk space warning; LOW_DISK_SPACE_WARNING exists only as a packet id in ids.rs
 DedicatedServer.setAllowFlight	skip:server		JSON-RPC management API only (ServerSettingsService); Horizon has no such API
 DedicatedServer.setDifficulty	port	crates/horizon-client/src/game/commands.rs::Game::cmd_difficulty	the /difficulty command; gap: minor: the new value is not written back to server.properties

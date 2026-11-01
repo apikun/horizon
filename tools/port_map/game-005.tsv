@@ -35,7 +35,7 @@ Entity.distanceToSqr	port	crates/horizon-client/src/mobs.rs::Mob::distance_sqr	p
 Entity.hurtOrSimulate	skip:other		dispatches to the server or client hurt; the owning side applies damage directly
 Entity.calculateViewQuaternion	inline	crates/horizon-client/src/game/enchant_effects.rs::Game::apply_piercing_effect	its only use is the lunge enchantment's apply_impulse, which rotates the direction by pitch then yaw by hand
 Entity.getPosition	port	crates/horizon-core/src/geometry/mod.rs::Vec3::lerp	previous to current position at the frame fraction
-Entity.awardKillScore	inline	crates/horizon-client/src/game.rs::Game::tick	the player's death branch fires entity_killed_player with the killer's type
+Entity.awardKillScore	inline	crates/horizon-client/src/game/mod.rs::Game::tick	the player's death branch fires entity_killed_player with the killer's type
 Entity.shouldRender	port	crates/horizon-client/src/game/entity_culling.rs::Game::entity_in_view	range from default_range (64 times the mean box edge times the view scale), then the frustum
 Entity.saveAsPassenger	port	crates/horizon-client/src/game/persist.rs::Game::mob_tree_nbt	a mob with its riders nested under Passengers; players and unsaved types are skipped
 Entity.getEncodeId	inline	crates/horizon-client/src/entity_nbt.rs::mob_to_nbt	the id written is the mob type's id
@@ -106,7 +106,7 @@ EntityDimensions.withEyeHeight	skip:data		eye heights come from entity-types.jso
 EntityDimensions.withAttachments	inline	crates/horizon-client/src/mobs/riders.rs::passenger_attachment	attachments are a per species table, not part of a dimensions value
 EntityEquipment.isEmpty	port	crates/horizon-world/src/player_inventory.rs::PlayerInventory::is_empty	
 EntityEquipment.tick	port	crates/horizon-world/src/inventory_tick.rs::tick_equipment	gap: minor: the player's worn items only; items on mobs never tick
-EntityEquipment.dropAll	port	crates/horizon-client/src/game.rs::Game::drop_inventory	the main inventory, armour and off hand are thrown in random directions on death (Inventory.dropAll)
+EntityEquipment.dropAll	port	crates/horizon-client/src/game/mod.rs::Game::drop_inventory	the main inventory, armour and off hand are thrown in random directions on death (Inventory.dropAll)
 EntityFluidInteraction.getOrCreateTrackerFor	inline	crates/horizon-world/src/entity_fluid.rs::EntityFluidInteraction::update	a tracker is found or pushed while scanning the box
 EntityFluidInteraction.getCurrentAccumulatorFor	inline	crates/horizon-world/src/entity_fluid.rs::EntityFluidInteraction::new	one accumulator is made per fluid tag up front
 EntityFluidInteraction.CurrentAccumulator.accumulate	port	crates/horizon-world/src/entity_fluid.rs::CurrentAccumulator::accumulate	
@@ -132,12 +132,12 @@ EquipmentSlot.isArmor	skip:other		slots are plain head, chest, legs and feet con
 EquipmentSlot.byName	skip:data		slot names are read as strings from data and NBT
 EquipmentSlotGroup.bySlot	inline	crates/horizon-client/src/game/lan_attributes.rs::slot_in_group	a slot is its own group, so the test is group == slot
 EquipmentTable.createForAllSlots	skip:data		drop chances come from the loot and entity data
-ExperienceOrb.<init>	port	crates/horizon-client/src/game.rs::Game::add_orb	random yaw and motion from the orb's own random; gap: minor: no rough direction offset and no unstuck when the orb spawns inside a block
+ExperienceOrb.<init>	port	crates/horizon-client/src/game/mod.rs::Game::add_orb	random yaw and motion from the orb's own random; gap: minor: no rough direction offset and no unstuck when the orb spawns inside a block
 ExperienceOrb.unstuckIfPossible	missing		minor: an orb that spawns inside blocks (a kill in a 1x1 hole) is not nudged to the nearest free spot; Mob has free_position, orbs do not use it
-ExperienceOrb.awardWithDirection	port	crates/horizon-client/src/game.rs::Game::spawn_orbs	gap: minor: the rough direction is never given, so xp bottle orbs do not fly away from the surface they hit
+ExperienceOrb.awardWithDirection	port	crates/horizon-client/src/game/mod.rs::Game::spawn_orbs	gap: minor: the rough direction is never given, so xp bottle orbs do not fly away from the surface they hit
 ExperienceOrb.setUnderwaterMovement	port	crates/horizon-client/src/entities.rs::ExperienceOrb::tick	gap: minor: tests the block at the orb's feet, not its eyes
 ExperienceOrb.hurtServer	port	crates/horizon-client/src/entities.rs::ExperienceOrb::hurt	ticked in #3514; `ExperienceOrb.hurtServer` is cited at crates/horizon-client/src/entities.rs:538
 ExperienceOrb.addAdditionalSaveData	port	crates/horizon-client/src/entity_nbt.rs::orb_to_nbt	gap: minor: Health is always written as 5
 ExperienceOrb.readAdditionalSaveData	port	crates/horizon-client/src/entity_nbt.rs::orbs_from_nbt	gap: minor: Health is ignored
-HumanoidArm.getOpposite	inline	crates/horizon-client/src/game.rs::Game::hand_geometry	the main hand's side is main_hand_left; the off hand is the other side
+HumanoidArm.getOpposite	inline	crates/horizon-client/src/game/mod.rs::Game::hand_geometry	the main hand's side is main_hand_left; the off hand is the other side
 InsideBlockEffectApplier.StepBasedCollector.flushStep	port	crates/horizon-client/src/arrows.rs::Collector::flush	gap: minor: the arrow collector has four effects (clear freeze, fire, lava, extinguish); the player's collector sits in motion.rs check_inside_blocks

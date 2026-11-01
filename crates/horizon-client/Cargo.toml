@@ -75,6 +75,13 @@ fs4 = { version = "1.1.0", default-features = false, features = ["sync"] }
 # The server thread's CPU time per tick (`HORIZON_SPIKES`, spans.rs).
 rustix = { version = "1", default-features = false, features = ["std", "time", "process", "fs"] }
 
+[target.'cfg(target_os = "android")'.dependencies]
+# The `AndroidApp` the entry hands to the event loop (the same version winit
+# uses, so the type matches `with_android_app`).
+android-activity = { version = "0.6", features = ["native-activity"] }
+# NativeActivity's events (touch, lifecycle) on top of it.
+winit = { version = "0.30.13", features = ["android-native-activity"] }
+
 [target.'cfg(windows)'.dependencies]
 # Use the registered URI handler without routing links through Explorer/cmd.
 open = { version = "5.4.5", features = ["shellexecute-on-windows"] }

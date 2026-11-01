@@ -90,23 +90,23 @@ Player.isEquipped	inline	crates/horizon-client/src/game/potions.rs::Game::turtle
 Player.canPlayerFitWithinBlocksAndEntitiesWhen	missing		unsure: the pose fit check (no collision in the new pose box) was not found in Horizon
 Player.increaseScore	skip:other		the score is experience.total in Horizon (death screen); there is no separate score counter
 Player.getWeaponItem	missing		unsure: the riptide spin-attack item (autoSpinAttackItemStack) was not found; Horizon keeps spin_attack parts only
-Player.destroyVanishingCursedItems	port	crates/horizon-client/src/game.rs::Game::drop_inventory	vanishing-curse stacks are removed from the death drops
-Player.hasCorrectToolForDrops	port	crates/horizon-client/src/game.rs::Game::tick_mining	the correct-tool test for harvest drops
+Player.destroyVanishingCursedItems	port	crates/horizon-client/src/game/mod.rs::Game::drop_inventory	vanishing-curse stacks are removed from the death drops
+Player.hasCorrectToolForDrops	port	crates/horizon-client/src/game/mod.rs::Game::tick_mining	the correct-tool test for harvest drops
 Player.readAdditionalSaveData	port	crates/horizon-client/src/save.rs::Level::read_player	
 Player.addAdditionalSaveData	port	crates/horizon-client/src/save.rs::Level::player_tag	
-Player.hurtHelmet	inline	crates/horizon-client/src/game.rs::Game::hurt_armor	gap: minor: hurt_armor hits all four armour slots; the head-only hit from LivingEntity.hurt is not separated
+Player.hurtHelmet	inline	crates/horizon-client/src/game/mod.rs::Game::hurt_armor	gap: minor: hurt_armor hits all four armour slots; the head-only hit from LivingEntity.hurt is not separated
 Player.isAboveGround	inline	crates/horizon-world/src/edge_backoff.rs::back_off_from_edge	the on-the-edge test before backing off
 Player.canFallAtLeast	inline	crates/horizon-world/src/edge_backoff.rs::back_off_from_edge	the no-collision drop test at the edge
 Player.deflectProjectile	port	crates/horizon-client/src/game/deflect.rs::Game::attack_redirectable	
 Player.baseDamageScaleFactor	inline	crates/horizon-client/src/game/mace.rs::Game::sweep_damage	
 Player.isEffectiveAi	skip:other		client-side AI gate; Horizon has no effective-AI check in its loop
 Player.hasContainerOpen	missing		unsure: the test for an open container menu (not the inventory menu) was not located
-Player.startSleepInBed	port	crates/horizon-client/src/game.rs::Game::try_sleep	
+Player.startSleepInBed	port	crates/horizon-client/src/game/mod.rs::Game::try_sleep	
 Player.isSleepingLongEnough	missing		unsure: the 100-tick sleep counter gate for the night skip was not found; the sleep timer only drives the fade
 Player.updateSwimming	port	crates/horizon-client/src/motion.rs::MotionWorld::swimming	
 Player.getXpNeededForNextLevel	port	crates/horizon-client/src/entities.rs::Experience::needed	
 Player.hasEnoughFoodToDoExhaustiveManoeuvres	missing		unsure: the food-or-flying test for exhaustive moves was not found in motion.rs
-Player.mayUseItemAt	port	crates/horizon-client/src/game.rs::Game::use_hand	the may-build test before use-on in adventure mode
+Player.mayUseItemAt	port	crates/horizon-client/src/game/mod.rs::Game::use_hand	the may-build test before use-on in adventure mode
 Player.isSwimming	port	crates/horizon-client/src/motion.rs::MotionWorld::swimming	
 Player.decorateDisplayNameComponent	missing		unsure: click and hover behaviour on player names in chat was not found
 Player.getSlot	port	crates/horizon-client/src/game/commands/items.rs::Game::slots_named	gap: minor: numeric slots 499 (carried item) and 500-503 (crafting grid) are not addressed

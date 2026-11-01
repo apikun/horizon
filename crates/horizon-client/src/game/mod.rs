@@ -289,6 +289,8 @@ mod text_displays;
 mod titles;
 mod tnt;
 mod totem;
+#[cfg(target_os = "android")]
+mod touch;
 mod trading;
 mod transient_blocks;
 mod trial_spawner;
@@ -484,8 +486,14 @@ impl Options {
     /// The command line, then what it asks of the process: the game folder, the account.
     /// A bad command line is a [`launch_api::UsageError`] (exit code 2, no crash report).
     fn read() -> Result<Option<Self>> {
-        let Some(mut o) = Self::parse(std::env::args().skip(1))
-            .map_err(|e| launch_api::UsageError(e.to_string()))?
+        // Android: an app process has no command line; the entry built the
+        // arguments (`--resources`, `--game-dir`, `--fullscreen`) from the
+        // app's folders (horizon_client::android::entry).
+        #[cfg(target_os = "android")]
+        let args = horizon_client::android::args().iter().cloned();
+        #[cfg(not(target_os = "android"))]
+        let args = std::env::args().skip(1);
+        let Some(mut o) = Self::parse(args).map_err(|e| launch_api::UsageError(e.to_string()))?
         else {
             return Ok(None);
         };
@@ -2155,6 +2163,10 @@ struct Game<'a> {
     last_input: Instant,
     /// Controllers (Horizon's own).
     pad: pad::Pads,
+    /// Touch controls (Android only): the layer between winit's touch
+    /// events and the pad and mouse input the game already understands.
+    #[cfg(target_os = "android")]
+    touch: touch::Touch,
     frames: u64,
     /// The glint clock and options, read once at the start of each frame
     /// (game/item_draw.rs).
@@ -7613,6 +7625,9 @@ impl Game<'_> {
         self.frame_graph
             .draw(self.settings.horizon.overlay, &mut batch, &self.gui.atlas);
         self.draw_pad_cursor(&mut batch);
+        // The touch controls sit over everything (they are not vanilla's).
+        #[cfg(target_os = "android")]
+        self.draw_touch_controls(&mut batch);
         self.resolve_inline_profiles(&batch.inline_profiles);
         batch
     }
@@ -15424,6 +15439,42 @@ impl ApplicationHandler for Game<'_> {
     }
 }
 
+impl Game<'_> {
+    /// Android suspends the app: the GPU context and the window go away and
+    /// come back with `Resumed`, which rebuilds them (`resumed` only creates
+    /// what is missing). What the player holds is released, so nothing stays
+    /// down across the gap.
+    #[cfg(target_os = "android")]
+    fn suspend_android(&mut self) {
+        self.capture(false);
+        self.focused = false;
+        self.captured = false;
+        self.keys.clear();
+        self.physical_keys.clear();
+        self.physical_buttons.clear();
+        for (slot, needs_toggle) in [
+            self.settings.toggle_crouch,
+            self.settings.toggle_sprint,
+            self.settings.toggle_attack,
+            self.settings.toggle_use,
+        ]
+        .into_iter()
+        .enumerate()
+        {
+            self.toggles.0[slot].set_down(false, needs_toggle);
+        }
+        self.sync_toggle(0);
+        self.sync_toggle(1);
+        self.left = false;
+        self.right = false;
+        self.pad.injected = horizon_client::gamepad::PadState::default();
+        self.touch = touch::Touch::default();
+        self.world_renderer_ready = false;
+        self.renderer = None;
+        self.window = None;
+    }
+}
+
 /// winit's events for a window's game, with any loop: a headless client (#4951) has no
 /// winit loop and calls these from its own.
 impl Game<'_> {
@@ -15445,6 +15496,26 @@ impl Game<'_> {
             return;
         }
         follow_keymap(&mut event);
+        // Android: touch drives the virtual pad (joystick, look, buttons)
+        // and taps become clicks. The layer answers with synthetic mouse
+        // events, which run through the rest of this function as if they
+        // arrived from the window.
+        #[cfg(target_os = "android")]
+        if let WindowEvent::Touch { .. } = &event {
+            let mut touch = std::mem::take(&mut self.touch);
+            let outcome = touch.on_event(self, &event);
+            self.touch = touch;
+            match outcome {
+                touch::Outcome::Handled => return,
+                touch::Outcome::Events(events) => {
+                    for synthetic in events {
+                        self.handle_window_event(event_loop, id, synthetic);
+                    }
+                    return;
+                }
+                touch::Outcome::Pass => {}
+            }
+        }
         // MacosUtil.setCtrlClickEmulatesRightClick: Control + left click is a right click.
         if let WindowEvent::MouseInput { state, button, .. } = &mut event
             && *button == MouseButton::Left
@@ -16698,6 +16769,9 @@ impl Game<'_> {
             return;
         }
         self.poll_pads(event_loop);
+        // Android: the sticks, the held look and tap releases, once a frame.
+        #[cfg(target_os = "android")]
+        self.touch_frame();
         self.pause_if_inactive();
         if self.options.frames.is_some() && self.started.elapsed() > self.options.timeout {
             self.error = Some("frame-limited run timed out".into());
@@ -16894,6 +16968,8 @@ impl<'a> Game<'a> {
             previous: now,
             last_input: now,
             pad: Default::default(),
+            #[cfg(target_os = "android")]
+            touch: Default::default(),
             frames: 0,
             glint_frame: Default::default(),
             item_level_cache: Default::default(),
@@ -18627,6 +18703,21 @@ fn leave_fullscreen_after(
     }
 }
 
+/// The loop the game runs on. Android's has to be built from the
+/// `AndroidApp` NativeActivity started with (winit routes its touch and
+/// lifecycle events from it); everywhere else winit's default.
+fn event_loop() -> Result<EventLoop<()>> {
+    #[cfg(target_os = "android")]
+    {
+        use winit::platform::android::EventLoopBuilderExtAndroid;
+        return Ok(EventLoop::builder()
+            .with_android_app(horizon_client::android::app().clone())
+            .build()?);
+    }
+    #[cfg(not(target_os = "android"))]
+    EventLoop::new().map_err(Into::into)
+}
+
 fn run_event_loop(mut game: Game<'_>) -> Result<()> {
     if game.options.headless {
         // No display to open winit's loop on: the game's own loop.
@@ -18637,7 +18728,7 @@ fn run_event_loop(mut game: Game<'_>) -> Result<()> {
         return game.error.take().map_or(Ok(()), Err);
     }
     let mut split = split::Split::new(game);
-    let result = EventLoop::new()?.run_app(&mut split);
+    let result = event_loop()?.run_app(&mut split);
     game = split.host;
     narrator::stop();
     leave_fullscreen_after(&result, &mut game.settings);
@@ -18953,6 +19044,19 @@ impl ApplicationHandler for App {
             App::Ready(game) => game.resumed(event_loop),
         }
     }
+    /// Android: the surface is gone until the next `Resumed`; drop what
+    /// holds it so both the loading screen's and the game's `resumed`
+    /// rebuild it.
+    #[cfg(target_os = "android")]
+    fn suspended(&mut self, _event_loop: &ActiveEventLoop) {
+        match self {
+            App::Loading(loading) => {
+                loading.renderer = None;
+                loading.window = None;
+            }
+            App::Ready(game) => game.host.suspend_android(),
+        }
+    }
     fn window_event(&mut self, event_loop: &ActiveEventLoop, id: WindowId, event: WindowEvent) {
         match self {
             App::Loading(loading) => loading.window_event(event_loop, id, event),
@@ -19070,7 +19174,7 @@ fn run_loading(
         error: None,
     };
     let mut app = App::Loading(Box::new(loading));
-    let result = EventLoop::new()?.run_app(&mut app);
+    let result = event_loop()?.run_app(&mut app);
     narrator::stop();
     match &mut app {
         // Ready: splitscreen around P1's game.

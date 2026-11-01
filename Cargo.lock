@@ -1254,6 +1254,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "horizon-android"
+version = "0.1.0"
+dependencies = [
+ "android-activity",
+ "horizon-client",
+ "horizon-mods",
+ "horizon-threads",
+ "log",
+ "ndk",
+ "zip",
+]
+
+[[package]]
 name = "horizon-anticheat"
 version = "0.1.0"
 dependencies = [
@@ -1302,6 +1315,7 @@ name = "horizon-client"
 version = "0.1.0"
 dependencies = [
  "ab_glyph",
+ "android-activity",
  "bytemuck",
  "chrono",
  "flate2",

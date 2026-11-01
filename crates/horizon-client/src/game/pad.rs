@@ -31,8 +31,9 @@ pub(super) struct Pads {
     /// The real controllers and the DualSense's output.
     #[cfg(feature = "controllers")]
     devices: hardware::Devices,
-    /// The virtual pad of `horizon-ctl pad`.
-    injected: PadState,
+    /// The virtual pad of `horizon-ctl pad`, and of the touch controls
+    /// (Android), which set the sticks and buttons directly.
+    pub(super) injected: PadState,
     /// The virtual pad was in use at the last poll.
     virtual_input: bool,
     /// Buttons a `pad ... tap` releases at the next poll.

@@ -60,7 +60,7 @@ CauldronInteractions.fillPowderSnowInteraction	inline	crates/horizon-client/src/
 CauldronInteractions.shulkerBoxInteraction	inline	crates/horizon-client/src/cauldron.rs::interact	gap: minor: posts no FLUID_PICKUP/FLUID_PLACE game event (Game::use_on_cauldron)
 CauldronInteractions.bannerInteraction	inline	crates/horizon-client/src/cauldron.rs::interact	gap: minor: posts no FLUID_PICKUP/FLUID_PLACE game event (Game::use_on_cauldron)
 CauldronInteractions.dyedItemIteration	inline	crates/horizon-client/src/cauldron.rs::interact	gap: minor: posts no FLUID_PICKUP/FLUID_PLACE game event (Game::use_on_cauldron)
-BlockTransformer.playerHasBlockingItemUseIntent	port	crates/horizon-client/src/game.rs::Game::block_transform	gap: minor: checks the off-hand shield for any hand; vanilla checks the main hand only
+BlockTransformer.playerHasBlockingItemUseIntent	port	crates/horizon-client/src/game/mod.rs::Game::block_transform	gap: minor: checks the off-hand shield for any hand; vanilla checks the main hand only
 BlockTransformer.BlockTransformData.builder	skip:java		builder
 BlockTransformer.BlockTransformData.Builder.build	skip:java		builder
 DataComponentExactPredicate.someOf	skip:data		builds an exact predicate from a stack; used for datagen-made predicates

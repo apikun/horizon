@@ -1,6 +1,6 @@
 PlayerHeadItem.getName	missing		minor: a head whose profile has a name should read "<name>'s Head"; Horizon shows the plain item name
 ShearsItem.createToolProperties	skip:data		tool rules (cobweb speed, shears breaking-speed tags) come from item data; items.rs reads minecraft:tool
-ShearsItem.mineBlock	port	crates/horizon-client/src/game.rs::Game::mine_block_with_held	shears wear one damage_per_block on any block but fire
+ShearsItem.mineBlock	port	crates/horizon-client/src/game/mod.rs::Game::mine_block_with_held	shears wear one damage_per_block on any block but fire
 ShearsItem.useOn	missing		unsure: SHEARS_TRIM is a NeoForge ability that no block in the pinned sources registers; pumpkin carving is a separate path (game/pumpkin.rs)
 SnowballItem.asProjectile	port	crates/horizon-client/src/game/dispenser.rs::Game::shoot_projectile_item	a dispensed snowball or egg is shot with the dispenser's own config
 SnowballItem.use	port	crates/horizon-client/src/game/creatures.rs::Game::throw_item	throw at 1.5 power, throw sound, use cooldown, one consumed

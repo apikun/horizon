@@ -189,7 +189,7 @@ FlowerBedBlock.performBonemeal	port	crates/horizon-world/src/level/bonemeal.rs::
 FlowerBedBlock.rotate	port	crates/horizon-world/src/worldgen/structure.rs::StateTransforms::rotate	
 FlowerBlock.makeEffectList	skip:data		the constructor sites' effects are the table in horizon-items/src/flowers.rs (floor(seconds * 20))
 FrogspawnBlock.mayPlaceOn	port	crates/horizon-world/src/level/survive.rs::Sim::frogspawn_may_place_on	
-FrogspawnBlock.spawnTadpoles	port	crates/horizon-client/src/game.rs::Game::process_level_events	handles the hatch block event: 2 to 5 tadpoles
+FrogspawnBlock.spawnTadpoles	port	crates/horizon-client/src/game/mod.rs::Game::process_level_events	handles the hatch block event: 2 to 5 tadpoles
 FrogspawnBlock.tick	port	crates/horizon-world/src/level/tick.rs::Sim::tick_block	
 FrogspawnBlock.updateShape	port	crates/horizon-world/src/level/shapes.rs::Sim::update_shape_class	
 FrostedIceBlock.fewerNeigboursThan	port	crates/horizon-world/src/level/hooks.rs::Sim::frosted_ice_fewer_neighbours_than	
@@ -243,7 +243,7 @@ LeafLitterBlock.canBeReplaced	port	crates/horizon-world/src/level/place.rs::Sim:
 LeafLitterBlock.canSurvive	port	crates/horizon-world/src/level/survive.rs::Sim::can_survive_class	
 LeafLitterBlock.createBlockStateDefinition	skip:data		block state definition is data (blocks table in horizon-items)
 LeafLitterBlock.rotate	port	crates/horizon-world/src/worldgen/structure.rs::StateTransforms::rotate	
-LilyPadBlock.entityInside	port	crates/horizon-client/src/game.rs::GameLevel::boat_trigger_boxes	ticked in #3516; `LilyPadBlock.entityInside` is cited at crates/horizon-client/src/game.rs:878
+LilyPadBlock.entityInside	port	crates/horizon-client/src/game/mod.rs::GameLevel::boat_trigger_boxes	ticked in #3516; `LilyPadBlock.entityInside` is cited at crates/horizon-client/src/game/mod.rs:878
 LilyPadBlock.mayPlaceOn	port	crates/horizon-world/src/level/survive.rs::Sim::may_place_on	
 MagmaBlock.stepOn	port	crates/horizon-client/src/mobs/ai.rs::effects_from_blocks	a mob on the ground on magma takes the hot-floor point; the player's is in motion.rs
 MangrovePropaguleBlock.canSurvive	port	crates/horizon-world/src/level/survive.rs::Sim::can_survive_class	

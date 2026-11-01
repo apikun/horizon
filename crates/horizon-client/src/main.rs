@@ -1,5 +1,8 @@
 //! Horizon: native Rust client for Minecraft Java Edition 26.3 gameplay.
 #![forbid(unsafe_code)]
+// The game loop's module: its file sits in game/ (as `game/mod.rs`) so the
+// same module tree is also the lib's on Android (lib.rs includes it there).
+#[path = "game/mod.rs"]
 mod game;
 
 use horizon_client::{crash, logging};

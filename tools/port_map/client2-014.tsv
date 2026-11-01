@@ -73,7 +73,7 @@ InBedChatScreen.onPlayerWokeUp	port	crates/horizon-client/src/game/chat.rs::Game
 LevelLoadingScreen.updateNarratedWidget	skip:other		narration text; Horizon has no narrator
 LevelLoadingScreen.extractChunksForRendering	port	crates/horizon-client-render/src/level_loading.rs::draw	chunk status colours; gap: minor: the debug red centre square is not drawn
 LevelLoadingScreen.getNetherPortalSprite	port	crates/horizon-client-render/src/hud_overlays.rs::portal_overlay	draws the block/nether_portal sprite
-LoadingOverlay.extractRenderState	port	crates/horizon-client/src/game.rs::Game::render	the reload screen's progress bar; gap: player: no Mojang logo and no fade in or out
+LoadingOverlay.extractRenderState	port	crates/horizon-client/src/game/mod.rs::Game::render	the reload screen's progress bar; gap: player: no Mojang logo and no fade in or out
 LoadingOverlay.tick	port	crates/horizon-client/src/game/server_packs.rs::Game::tick_server_packs	finishes the reload; gap: minor: no fade-out before it finishes
 LoadingOverlay.isReadyToFadeOut	missing		minor: no one-second fade-in before the reload can finish
 LoadingOverlay.extractProgressBar	port	crates/horizon-client-render/src/level_loading.rs::draw_progress	200 by 2 bar; gap: minor: no fade alpha
@@ -119,7 +119,7 @@ RecoverWorldDataScreen.buildInfo	missing		minor: no issue summary for level.dat 
 RecoverWorldDataScreen.collectIssue	missing		minor: no issue check for level.dat and level.dat_old in the menu
 RecoverWorldDataScreen.repositionElements	missing		minor: layout of the Recover World screen, which Horizon lacks
 RecoverWorldDataScreen.getNarrationMessage	skip:other		narration text; Horizon has no narrator
-Screen.extractRenderStateWithTooltipAndSubtitles	port	crates/horizon-client/src/game.rs::Game::hud_layers	draws the current screen's layer and tooltips; unsure about subtitles
+Screen.extractRenderStateWithTooltipAndSubtitles	port	crates/horizon-client/src/game/mod.rs::Game::hud_layers	draws the current screen's layer and tooltips; unsure about subtitles
 Screen.setInitialFocus	skip:ui		keyboard focus starts on the first widget; Horizon draws its own focus
 Screen.isInputCaptured	port	crates/horizon-client/src/title.rs::Title::has_caret_field	gap: minor: only the title screen's text fields
 Screen.addWidget	skip:ui		widget list plumbing; Horizon draws each screen from its own state

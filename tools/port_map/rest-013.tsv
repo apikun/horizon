@@ -66,7 +66,7 @@ MinecraftServer.<init>	inline	crates/horizon-client/src/game/dedicated.rs::Game:
 MinecraftServer.loadLevel	inline	crates/horizon-client/src/game/dedicated.rs::Game::run_dedicated	gap: minor: the world is opened in run_dedicated; no JFR load profiling
 MinecraftServer.setupDebugLevel	skip:debug		debug world preset is not offered
 MinecraftServer.prepareLevels	port	crates/horizon-client/src/game/initial_spawn.rs::Game::find_world_spawn	gap: minor: waits only for the spawn chunks (find_world_spawn returns None while one loads); no progress stage for other levels, no mob-spawn flag update here
-MinecraftServer.saveEverything	port	crates/horizon-client/src/game.rs::Game::save_game_with	gap: minor: no low-disk warning
+MinecraftServer.saveEverything	port	crates/horizon-client/src/game/mod.rs::Game::save_game_with	gap: minor: no low-disk warning
 MinecraftServer.finishMeasuringTaskExecutionTime	skip:server		tick timing for the profiler
 MinecraftServer.constructOrExtractCrashReport	skip:debug		crash report wrapping
 MinecraftServer.haveTime	inline	crates/horizon-client/src/game/levels.rs::Game::wait_for_next_server_tick	gap: minor: no time budget for queued tasks
@@ -76,7 +76,7 @@ MinecraftServer.shouldRun	missing		minor: no per-task deferral; queued tasks run
 MinecraftServer.pollTaskInternal	inline	crates/horizon-client/src/game/integrated.rs::Game::run_tasks	gap: minor: only the task queue; chunk-source tasks are not polled here
 MinecraftServer.loadStatusIcon	inline	crates/horizon-client/src/game/dedicated.rs::Game::run_dedicated	gap: minor: only server-icon.png; no world icon fallback
 MinecraftServer.processPacketsAndTick	port	crates/horizon-client/src/game/levels.rs::Game::tick_server	reads the network, then ticks the levels
-MinecraftServer.autoSave	inline	crates/horizon-client/src/game.rs::Game::tick	gap: minor: the save runs every 6000 ticks; /save-off is checked in the dedicated loop, where the check does nothing, so it does not stop the save
+MinecraftServer.autoSave	inline	crates/horizon-client/src/game/mod.rs::Game::tick	gap: minor: the save runs every 6000 ticks; /save-off is checked in the dedicated loop, where the check does nothing, so it does not stop the save
 MinecraftServer.logTickMethodTime	skip:server		tick timing log for the profiler
 MinecraftServer.computeNextAutosaveInterval	missing		minor: the save runs every 6000 ticks (game.rs tick), not 300 s scaled by the tick rate
 MinecraftServer.onTickRateChanged	missing		minor: the autosave interval does not follow /tick rate

@@ -1,0 +1,35 @@
+[package]
+name = "horizon-android"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+rust-version = "1.90"
+description = "Horizon on Android: the NativeActivity glue that runs the game"
+
+[lib]
+name = "horizon_android"
+# NativeActivity loads this shared library and calls its `android_main`.
+crate-type = ["cdylib"]
+
+# Everything is Android-only: on the desktop this crate builds as an empty
+# stub, so `cargo clippy --workspace` (CI) stays green.
+[target.'cfg(target_os = "android")'.dependencies]
+# The app facade NativeActivity hands to `android_main`; the same version
+# winit 0.30 uses, so its `AndroidApp` is the one the event loop wants.
+android-activity = { version = "0.6", features = ["native-activity"] }
+# The APK's assets (`asset_manager()` returns ndk's wrapper).
+ndk = "0.9"
+# The game, without the desktop-only features: no gilrs controllers (no
+# libudev), sound on (cpal's AAudio output).
+horizon-client = { path = "../horizon-client", default-features = false, features = ["audio"] }
+# The allocator and its tuning, as the desktop bin's main sets up.
+horizon-threads = { path = "../horizon-threads" }
+# The mod API level mark, kept in the program like the desktop bin does.
+horizon-mods = { path = "../horizon-mods", default-features = false, features = ["index"] }
+log = "0.4"
+# First-run extraction of a resource bundle packed into the APK's assets
+# (`tools/build_android.py --resources`): the game reads plain files.
+zip = { version = "9.1.3", default-features = false, features = ["deflate"] }
+
+[lints]
+workspace = true

@@ -20,14 +20,14 @@ LevelBasedValue.Exponent.calculate	port	crates/horizon-items/src/enchant.rs::lev
 LevelBasedValue.Fraction.calculate	port	crates/horizon-items/src/enchant.rs::level_value	minecraft:fraction; zero denominator gives 0
 LevelBasedValue.Linear.calculate	port	crates/horizon-items/src/enchant.rs::level_value	minecraft:linear
 LevelBasedValue.Lookup.calculate	port	crates/horizon-items/src/enchant.rs::level_value	minecraft:lookup with fallback
-ChangeItemDamage.apply	port	crates/horizon-client/src/game.rs::Game::damage_held	gap: minor: the held item only; Soul Speed's boots use wear_boots and Thorns its own path
+ChangeItemDamage.apply	port	crates/horizon-client/src/game/mod.rs::Game::damage_held	gap: minor: the held item only; Soul Speed's boots use wear_boots and Thorns its own path
 EnchantmentAttributeEffect.getModifier	port	crates/horizon-items/src/enchant.rs::Enchantments::attributes	slot suffix on the id is added in apply_enchantment_attributes
 EnchantmentAttributeEffect.onChangedBlock	inline	crates/horizon-client/src/game/enchant_effects.rs::Game::tick_soul_speed	modifiers switch on there (Soul Speed only)
 EnchantmentAttributeEffect.onDeactivated	inline	crates/horizon-client/src/game/enchant_effects.rs::Game::tick_soul_speed	modifiers switch off there (Soul Speed only)
 EnchantmentAttributeEffect.makeAttributeMap	skip:java		multimap builder for one modifier
 EnchantmentHelper.updateEnchantments	port	crates/horizon-items/src/item_data.rs::ItemStack::enchant	gap: minor: sets one enchantment; no bulk consumer form
 EnchantmentHelper.processAmmoUse	port	crates/horizon-client/src/game/enchant_effects.rs::Game::bow_enchantments	Infinity as a flag; the ammo count change is decided by the caller
-EnchantmentHelper.processBlockExperience	inline	crates/horizon-client/src/game.rs::Game::break_block_as_player	Silk Touch zeroes the XP at the call site; spawners keep it
+EnchantmentHelper.processBlockExperience	inline	crates/horizon-client/src/game/mod.rs::Game::break_block_as_player	Silk Touch zeroes the XP at the call site; spawners keep it
 EnchantmentHelper.processMobExperience	skip:other		no enchantment in the data uses mob_experience, so the amount never changes
 EnchantmentHelper.createBook	missing		player: the creative menu has no enchanted book for each enchantment (CreativeModeTabs); creative.rs lists none
 EnchantmentHelper.runIterationOnItem	port	crates/horizon-items/src/item_data.rs::ItemStack::enchantments	the (enchantment, level) iteration; callers loop over it
@@ -81,18 +81,18 @@ Level.isInValidBounds	port	crates/horizon-world/src/level/update.rs::Sim::is_in_
 Level.isInWorldBoundsHorizontal	inline	crates/horizon-world/src/level/update.rs::Sim::is_in_valid_bounds	the -30000000..30000000 test
 Level.isInValidBoundsHorizontal	inline	crates/horizon-world/src/level/update.rs::Sim::is_in_valid_bounds	chunk validity folded into the block range
 Level.getChunk	missing		unsure: no getter for a full chunk object found; block reads go through World::block
-Level.getFluidState	port	crates/horizon-client/src/game.rs::Column::state	gap: minor: the isInValidBounds check is not repeated here
-Level.isDarkOutside	port	crates/horizon-client/src/game.rs::GameLevel::sky_darken	gap: minor: the sky darkness value; the fixed-time dimension check is not here
+Level.getFluidState	port	crates/horizon-client/src/game/mod.rs::Column::state	gap: minor: the isInValidBounds check is not repeated here
+Level.isDarkOutside	port	crates/horizon-client/src/game/mod.rs::GameLevel::sky_darken	gap: minor: the sky darkness value; the fixed-time dimension check is not here
 Level.playSound	port	crates/horizon-world/src/level/update.rs::Sim::sound	
 Level.playSeededSound	missing		unsure: no seeded sound path found; Sim::sound takes no seed
-Level.addBlockEntityTicker	port	crates/horizon-client/src/game.rs::GameLevel::load_block_entity	the ticker comes with the block entity load
+Level.addBlockEntityTicker	port	crates/horizon-client/src/game/mod.rs::GameLevel::load_block_entity	the ticker comes with the block entity load
 Level.guardEntityTick	skip:debug		crash-report wrapper around an entity tick
 Level.getBlockEntity	skip:other		bare block_entities map lookup at each caller; no port of its own
-Level.setBlockEntity	port	crates/horizon-client/src/game.rs::GameLevel::load_block_entity	
+Level.setBlockEntity	port	crates/horizon-client/src/game/mod.rs::GameLevel::load_block_entity	
 Level.loadedAndEntityCanStandOnFace	missing		unsure: no face-sturdy test for placed hanging entities found
 Level.getWorldBorderAdjustedRespawnData	missing		unsure: respawn clamp to the world border not found
 Level.hasEntities	missing		unsure: no entity-in-box test found for this use
-Level.getClockTimeTicks	port	crates/horizon-client/src/game.rs::GameLevel::day_time	day time; no separate clock time
+Level.getClockTimeTicks	port	crates/horizon-client/src/game/mod.rs::GameLevel::day_time	day time; no separate clock time
 Level.getThunderLevel	port	crates/horizon-client-render/src/world.rs::World::levels	thunder scaled by rain
 Level.setThunderLevel	port	crates/horizon-client/src/game/remote.rs::Game::handle_packet	weather game event sets the thunder level
 Level.setRainLevel	port	crates/horizon-client/src/game/remote.rs::Game::handle_packet	weather game event sets the rain level
@@ -113,7 +113,7 @@ ChunkPos.getBlockAt	skip:other		no caller in 26.3 code
 ChunkPos.contains	port	crates/horizon-core/src/position.rs::BlockPos::chunk	a block is in a chunk when its chunk() is that chunk
 ChunkPos.getChessboardDistance	inline	crates/horizon-client/src/ticket_levels.rs::compute	Chebyshev distance folded into the ticket level loop
 ChunkPos.distanceSquared	missing		unsure: caller not identified in 26.3 sources; no port located
-CollisionGetter.isUnobstructed	port	crates/horizon-client/src/game.rs::GameLevel::is_unobstructed	the state-based overload
+CollisionGetter.isUnobstructed	port	crates/horizon-client/src/game/mod.rs::GameLevel::is_unobstructed	the state-based overload
 CollisionGetter.noBorderCollision	port	crates/horizon-client-render/src/collisions.rs::EntityCollisions::movement_border	border shape when inside close to the border
 CollisionGetter.getPreMoveCollisions	inline	crates/horizon-client-render/src/collisions.rs::SceneCollisions::resolve_with_context	gap: minor: entity and block shapes are not returned as a list; the resolver takes them together
 CollisionGetter.getBlockAndLiquidCollisions	port	crates/horizon-client-render/src/collisions.rs::no_collision_or_liquid	gap: minor: a yes or no test, not the shape list

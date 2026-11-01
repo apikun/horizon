@@ -53,7 +53,7 @@ DrawableGizmoPrimitives.addLine	port	crates/horizon-client/src/gizmos.rs::Gizmos
 DrawableGizmoPrimitives.addTriangleFan	missing		minor: debug triangle fans are not drawn
 DrawableGizmoPrimitives.addQuad	missing		minor: debug filled quads are not drawn
 DrawableGizmoPrimitives.addText	missing		minor: debug gizmo text labels are not drawn
-DrawableGizmoPrimitives.submit	port	crates/horizon-client/src/game.rs::Game::render	gap: minor: lines of both lists go to camera_relative in Game::render; only lines are drawn
+DrawableGizmoPrimitives.submit	port	crates/horizon-client/src/game/mod.rs::Game::render	gap: minor: lines of both lists go to camera_relative in Game::render; only lines are drawn
 BundleSelectedItemSpecialRenderer.update	port	crates/horizon-assets/src/item_model.rs::Resolve::node	bundle selected item layers via the BundleSelectedItem arm
 CompositeModel.update	port	crates/horizon-assets/src/item_model.rs::Resolve::node	composite arm: each child in order
 CompositeModel.Unbaked.resolveDependencies	port	crates/horizon-assets/src/item_model.rs::ItemModelNode::dependencies	

@@ -26,10 +26,10 @@ Block.boxes	skip:data		Shape array builder; shapes come from extracted data.
 Block.cube	skip:data		Shape builder; shapes come from extracted data.
 Block.boxZ	skip:data		Shape builder; shapes come from extracted data.
 Block.dropFromLootTable	inline	crates/horizon-client/src/game/spill.rs::GameLevel::drop_interact_loot	gap: minor: returns nothing, where vanilla returns whether anything dropped; folded into the interact-loot drop.
-Block.popExperience	port	crates/horizon-client/src/game.rs::Game::spawn_orbs	gap: minor: popExperience checks the block_drops rule, and the ore XP in break_block_as_player does not.
+Block.popExperience	port	crates/horizon-client/src/game/mod.rs::Game::spawn_orbs	gap: minor: popExperience checks the block_drops rule, and the ore XP in break_block_as_player does not.
 Block.fallOn	port	crates/horizon-world/src/block_landing.rs::BlockLandingRegistry::fall_on	Default and hay rules apply fall damage with the block's reduction.
 Block.getShapeForEachState	skip:java		Shape lookup cache over the state table; Horizon precomputes shapes per state.
-Block.tryDropExperience	inline	crates/horizon-client/src/game.rs::Game::break_block_as_player	Sampled block XP and pop folded into the break path; silk touch zeroes it as in vanilla (hard-coded check).
+Block.tryDropExperience	inline	crates/horizon-client/src/game/mod.rs::Game::break_block_as_player	Sampled block XP and pop folded into the break path; silk touch zeroes it as in vanilla (hard-coded check).
 Block.ShapePairKey.equals	skip:java		Hash key for the shape cache.
 Blocks.ocelotOrParrot	port	crates/horizon-client/src/mobs/spawn_rules.rs::is_valid_spawn	Leaves spawn rule for ocelots and parrots (VALID_SPAWN_LEAVES).
 Blocks.logProperties	skip:data		Block.Properties builder; the values come from extracted block data.
@@ -141,7 +141,7 @@ ChestBlock.getStateForPlacement	port	crates/horizon-world/src/level/place.rs::Si
 ChestBlock.getChestType	inline	crates/horizon-world/src/level/place.rs::Sim::placement_class	Left or right partner check folded into the Chest placement arm.
 ChestBlock.getFluidState	port	crates/horizon-world/src/level/mod.rs::Behaviours::fluid	Waterlogged fluid is read from per-state facts.
 ChestBlock.candidatePartnerFacing	port	crates/horizon-world/src/level/place.rs::Sim::chest_candidate_partner_facing	Facing of a single chest on the side, when it can connect.
-ChestBlock.useWithoutItem	port	crates/horizon-client/src/game.rs::Game::open_menu	Opens the chest menu, with the open stat and piglin anger.
+ChestBlock.useWithoutItem	port	crates/horizon-client/src/game/mod.rs::Game::open_menu	Opens the chest menu, with the open stat and piglin anger.
 ChestBlock.getTicker	port	crates/horizon-client-render/src/block_entity_anim.rs::ticker	Client-side lid animation ticker.
 ChestBlock.isCatSittingOnChest	port	crates/horizon-client/src/game/storage.rs::Game::chest_blocked_at	A sitting cat above blocks the chest.
 ChestBlock.rotate	skip:data		Rotation is a precomputed table from extracted data.

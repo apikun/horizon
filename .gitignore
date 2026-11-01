@@ -35,3 +35,11 @@
 
 # Release-only compiled original exporter bundle.
 /exporters/
+# Android: built by tools/build_android.py, never committed (the resources
+# bundle is the player's own Minecraft data).
+/android/.gradle/
+/android/build/
+/android/app/build/
+/android/app/src/main/jniLibs/
+/android/app/src/main/assets/
+/android/local.properties/

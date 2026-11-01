@@ -33,6 +33,7 @@ members = [
     "crates/horizon-optifine",
     "crates/horizon-shader-api",
     "crates/horizon-release-sign",
+    "crates/horizon-android",
     "xtask",
 ]
 resolver = "2"

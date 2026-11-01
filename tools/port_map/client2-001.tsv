@@ -39,7 +39,7 @@ EndFlashState.flashStartedThisTick	inline	crates/horizon-client/src/game/end.rs:
 FaceInfo.Extent.select	skip:data		corner selection; Horizon's unit-cube corner table PORTAL_FACES in block_entity_render.rs has the same order
 FaceInfo.VertexInfo.select	skip:data		corner selection; Horizon's unit-cube corner table PORTAL_FACES in block_entity_render.rs has the same order
 FirstPersonHandsAndItemsRenderer.calculateMapTilt	inline	crates/horizon-client/src/game/maps.rs::Game::two_handed_map_geometry	tilt computed inline with the calculateMapTilt comment
-FirstPersonHandsAndItemsRenderer.renderPlayerHand	port	crates/horizon-client/src/game.rs::Game::hand_geometry	empty main hand's arm model with the player skin
+FirstPersonHandsAndItemsRenderer.renderPlayerHand	port	crates/horizon-client/src/game/mod.rs::Game::hand_geometry	empty main hand's arm model with the player skin
 FirstPersonHandsAndItemsRenderer.renderMapHand	missing		player: holding a map in both hands, neither arm is drawn behind it (vanilla draws both arms)
 FirstPersonHandsAndItemsRenderer.renderOneHandedMap	port	crates/horizon-client/src/first_person.rs::one_handed_map_pose	gap: player: the arm holding a map is not drawn; the map hand branch skips the arm
 FirstPersonHandsAndItemsRenderer.renderTwoHandedMap	port	crates/horizon-client/src/game/maps.rs::Game::two_handed_map_geometry	gap: player: the arms that hold a two-handed map are not drawn
@@ -48,7 +48,7 @@ FirstPersonHandsAndItemsRenderer.applyEatTransform	port	crates/horizon-client/sr
 FirstPersonHandsAndItemsRenderer.applyBrushTransform	missing		player: a brush in use is held still; it does not sweep back and forth while brushing
 FirstPersonHandsAndItemsRenderer.applyItemArmAttackTransform	port	crates/horizon-client/src/first_person.rs::item_pose	attack swing rotation in the Swing pose
 FirstPersonHandsAndItemsRenderer.applyItemArmTransform	port	crates/horizon-client/src/first_person.rs::item_pose	base item-in-arm translation
-FirstPersonHandsAndItemsRenderer.submitHandsWithItems	port	crates/horizon-client/src/game.rs::Game::hand_geometry	sway, both hands, empty-hand arm and item pose
+FirstPersonHandsAndItemsRenderer.submitHandsWithItems	port	crates/horizon-client/src/game/mod.rs::Game::hand_geometry	sway, both hands, empty-hand arm and item pose
 FirstPersonHandsAndItemsRenderer.swingArm	port	crates/horizon-client/src/first_person.rs::item_pose	attack swing translation and arm rotation
 GameRenderer.<init>	port	crates/horizon-client-render/src/gfx.rs::Renderer::new	lightmap, hand target, debug crosshair and screen effects are built here
 GameRenderer.close	skip:other		GPU resource teardown; wgpu drops the renderer's objects
@@ -65,7 +65,7 @@ GameRenderer.integrate3DHudDepth	missing		minor: only runs when a post effect is
 GameRenderer.extractWindow	skip:other		render-state copy of the window size; Horizon reads the window directly
 GameRenderer.extractOptions	skip:other		render-state copy of options; Horizon reads settings directly
 GameRenderer.extractCamera	skip:other		render-state copy of camera and fog; Horizon computes them in camera.rs and fog.rs
-GameRenderer.resetData	inline	crates/horizon-client/src/game.rs::Game::finish_close_world	boss overlay reset on world close; camera and map-texture resets not verified here
+GameRenderer.resetData	inline	crates/horizon-client/src/game/mod.rs::Game::finish_close_world	boss overlay reset on world close; camera and map-texture resets not verified here
 GameRenderer.projectPointToScreen	skip:other		no callers in vanilla 26.3
 GameRenderer.useImprovedTransparency	missing		player: the Improved transparency option is saved and listed but nothing it gates exists in the renderer
 GlobalSettingsUniform.update	skip:other		global uniform (window size, time, gamma, glint) written per pass; Horizon sets its own uniforms
@@ -79,7 +79,7 @@ LevelRenderer.<init>	port	crates/horizon-client-render/src/gfx.rs::Renderer::new
 LevelRenderer.submitFeatures	port	crates/horizon-client-render/src/gfx.rs::Renderer::draw_frame	entities, block entities, crumbling, particles, outline and gizmos are submitted and drawn in the frame
 LevelRenderer.repositionCamera	port	crates/horizon-client-render/src/gfx/resident.rs::camera_column	camera section column that the section grid is centred on; gap: minor: world border invalidation is not part of it
 LevelRenderer.addMainPass	port	crates/horizon-client-render/src/gfx.rs::Renderer::draw_frame	gap: minor: the Improved transparency targets (depth bounds, transmittance, accumulate) are not created
-LevelRenderer.executeAlwaysOnTop	port	crates/horizon-client/src/game.rs::Game::render	always-on-top debug lines and crosshair drawn over the world
+LevelRenderer.executeAlwaysOnTop	port	crates/horizon-client/src/game/mod.rs::Game::render	always-on-top debug lines and crosshair drawn over the world
 LevelRenderer.executeSolid	port	crates/horizon-client-render/src/gfx.rs::Renderer::draw_sections	solid section draws in arena page order
 LevelRenderer.prepareTranslucents	port	crates/horizon-client-render/src/gfx/translucency.rs::Sorter::sort	translucent quads sorted from the camera each frame
 LevelRenderer.executeOit	missing		player: with Improved transparency on, translucent blocks and water blend order-independently; Horizon has no OIT pass and the option does nothing
@@ -94,7 +94,7 @@ LevelRenderer.submitEntities	port	crates/horizon-client-render/src/gfx.rs::Rende
 LevelRenderer.submitBlockEntities	port	crates/horizon-client-render/src/gfx.rs::Renderer::block_entities	block entity list submitted for drawing
 LevelRenderer.submitBlockDestroyAnimation	port	crates/horizon-client-render/src/gfx.rs::Renderer::draw_frame	crumbling overlay drawn on the block being broken
 LevelRenderer.submitTransientBlocks	missing		player: a block the server sends as temporary (ClientboundAddTransientBlockPacket) does not appear; the packet is not handled
-LevelRenderer.submitHitOutline	port	crates/horizon-client/src/game.rs::Game::outline_boxes	outline of the block under the crosshair
+LevelRenderer.submitHitOutline	port	crates/horizon-client/src/game/mod.rs::Game::outline_boxes	outline of the block under the crosshair
 LevelRenderer.close	skip:other		GPU resource teardown
 LevelRenderer.invalidateCompiledGeometry	port	crates/horizon-client-render/src/gfx.rs::Renderer::clear_sections	all section meshes dropped and rebuilt when settings are applied
 LevelRenderer.scheduleTranslucentSectionResort	port	crates/horizon-client-render/src/gfx/translucency.rs::SortState::update	resort scheduled when the camera point of view changes
@@ -107,7 +107,7 @@ LevelTargetBundle.replace	skip:other		render-target bundle for post chains; Hori
 LevelTargetBundle.get	skip:other		render-target bundle for post chains; Horizon has no frame graph
 Lightmap.render	port	crates/horizon-client-render/src/gfx.rs::Renderer::update_lightmap	lightmap pass from sky, block, darkness, gamma, night vision, flicker and boss darkening
 LightmapRenderStateExtractor.calculateDarknessScale	port	crates/horizon-client/src/game/sculk.rs::Game::darkness_lighting	pulsing darkness scale from the darkness blend and the option
-LightmapRenderStateExtractor.extract	port	crates/horizon-client/src/game.rs::Game::render	lightmap inputs gathered into the frame; the end flash is added to sky_light_factor in end.rs::end_flash_sky
+LightmapRenderStateExtractor.extract	port	crates/horizon-client/src/game/mod.rs::Game::render	lightmap inputs gathered into the frame; the end flash is added to sky_light_factor in end.rs::end_flash_sky
 MapRenderer.extractRenderState	port	crates/horizon-client/src/game/maps.rs::Game::map_vertices	map texture and decorations gathered for drawing
 MapRenderer.extractDecorationRenderState	port	crates/horizon-client/src/game/maps.rs::Game::map_vertices	decoration sprite, position and rotation drawn per map
 MappableRingBuffer.currentBuffer	skip:other		GPU ring buffer bookkeeping

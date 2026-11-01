@@ -1,6 +1,11 @@
 //! Horizon native client: resources, world streaming, rendering and the
 //! bindings between the validated simulation pieces and the game loop.
 #![forbid(unsafe_code)]
+// Android: the game's module tree (game/mod.rs) reaches the lib's pieces by
+// this crate's name, as the bin does; on Android the tree lives in this
+// crate, so it needs the name as its own.
+#[cfg(target_os = "android")]
+extern crate self as horizon_client;
 pub mod advancements;
 pub mod ambience;
 pub mod animate_tick;
@@ -155,3 +160,13 @@ pub use horizon_items::flowers;
 pub use horizon_items::item_data;
 pub use horizon_items::items;
 pub use horizon_items::random_sequences;
+
+/// Android: the game reuses the bin's `game` module (the loop and the window
+/// live there; a bin's modules cannot be reached from another crate) and the
+/// platform entry that stands in for the bin's `main`.
+#[cfg(target_os = "android")]
+#[path = "game/mod.rs"]
+pub mod game;
+
+#[cfg(target_os = "android")]
+pub mod android;

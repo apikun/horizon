@@ -62,7 +62,7 @@ GlyphRenderState.buildVertices	skip:ui		GUI draw-queue geometry; Horizon draws i
 GuiItemRenderState.calculateOversizedItemBounds	skip:ui		GUI draw-queue geometry; Horizon draws its own HUD
 GuiItemRenderState.calculateBounds	skip:ui		GUI draw-queue geometry; Horizon draws its own HUD
 GuiRenderState.nextStratum	skip:ui		GUI draw-queue ordering
-GuiRenderState.blurBeforeThisStratum	port	crates/horizon-client/src/game.rs::Game::hud_layers	blur_at marks the vertices drawn before the blur (game.rs hud batch)
+GuiRenderState.blurBeforeThisStratum	port	crates/horizon-client/src/game/mod.rs::Game::hud_layers	blur_at marks the vertices drawn before the blur (game.rs hud batch)
 GuiRenderState.up	skip:ui		GUI draw-queue ordering
 GuiRenderState.addItem	skip:ui		GUI draw-queue ordering
 GuiRenderState.addText	skip:ui		GUI draw-queue ordering

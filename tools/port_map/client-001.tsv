@@ -82,15 +82,15 @@ ClientHandshakePacketListenerImpl.handleCompression	port	crates/horizon-client/s
 ClientHandshakePacketListenerImpl.handleCustomQuery	port	crates/horizon-client/src/net.rs::run	answers an unknown custom query with no data
 ClientHandshakePacketListenerImpl.fillListenerSpecificCrashDetails	skip:debug		crash report details only
 ClientLevel.handleBlockChangedAck	port	crates/horizon-client/src/game/remote.rs::Game::end_predictions	settles the predicted block actions up to the sequence
-ClientLevel.onBlockEntityAdded	port	crates/horizon-client/src/game.rs::Game::entity_geometry	off-screen block entities (beacon, end gateway, structure and test blocks) are drawn without a view test
+ClientLevel.onBlockEntityAdded	port	crates/horizon-client/src/game/mod.rs::Game::entity_geometry	off-screen block entities (beacon, end gateway, structure and test blocks) are drawn without a view test
 ClientLevel.syncBlockState	port	crates/horizon-client/src/game/remote.rs::Game::end_predictions	gap: minor: writes the server's state but does not move the player out when the block would sit on them (absSnapTo)
 ClientLevel.setBlock	port	crates/horizon-client/src/game/remote.rs::Game::set_block	gap: minor: the prediction bookkeeping is in Game::server_block
 ClientLevel.<init>	port	crates/horizon-client/src/game/remote.rs::Game::enter_remote_dimension	gap: minor: the environment layers are applied in Game::render
-ClientLevel.addEnvironmentAttributeLayers	port	crates/horizon-client/src/game.rs::Game::render	sky colour and sky light move during a lightning flash
+ClientLevel.addEnvironmentAttributeLayers	port	crates/horizon-client/src/game/mod.rs::Game::render	sky colour and sky light move during a lightning flash
 ClientLevel.pollLightUpdates	skip:other		light is applied when it arrives or relit at once (light.rs relight); there is no queue to poll
-ClientLevel.getPrecipitationAt	port	crates/horizon-client/src/game.rs::GameLevel::precipitation	gap: minor: no check that the chunk is loaded; vanilla answers none for an unloaded column
-ClientLevel.removeBlockBreakingProgress	inline	crates/horizon-client/src/game.rs::Game::destroy_block_progress	minor: the 400-tick expiry runs on every update, not every 20 ticks
-ClientLevel.removeProgress	inline	crates/horizon-client/src/game.rs::Game::destroy_block_progress	cracks are keyed by breaker id, so there are no per-position sets to tidy
+ClientLevel.getPrecipitationAt	port	crates/horizon-client/src/game/mod.rs::GameLevel::precipitation	gap: minor: no check that the chunk is loaded; vanilla answers none for an unloaded column
+ClientLevel.removeBlockBreakingProgress	inline	crates/horizon-client/src/game/mod.rs::Game::destroy_block_progress	minor: the 400-tick expiry runs on every update, not every 20 ticks
+ClientLevel.removeProgress	inline	crates/horizon-client/src/game/mod.rs::Game::destroy_block_progress	cracks are keyed by breaker id, so there are no per-position sets to tidy
 ClientLevel.shouldTickDeath	missing		minor: death animations tick for every remote mob held; no simulation-distance check
 ClientLevel.tickNonPassenger	port	crates/horizon-client/src/game/remote.rs::Game::tick_remote_entities	ticks each remote entity
 ClientLevel.tickPassenger	port	crates/horizon-client/src/game/passengers.rs::Game::position_riders	gap: minor: passengers are placed on their vehicle; no per-passenger tick
@@ -106,10 +106,10 @@ ClientLevel.fillReportDetails	skip:debug		crash report details only
 ClientLevel.playPlayerSound	skip:other		no caller in the 26.3 client sources
 ClientLevel.playSound	missing		player: distance-delayed sounds (over 10 blocks, sqrt(distance)/40 s) play at once, so far fireworks and similar sounds arrive early; audio.rs has no delay
 ClientLevel.getRelativeTickSpeed	skip:other		no caller in the 26.3 client sources
-ClientLevel.destroyBlockProgress	port	crates/horizon-client/src/game.rs::Game::destroy_block_progress	sets or clears another player's crack on a block
+ClientLevel.destroyBlockProgress	port	crates/horizon-client/src/game/mod.rs::Game::destroy_block_progress	sets or clears another player's crack on a block
 ClientLevel.addAlwaysVisibleParticle	port	crates/horizon-client-render/src/particles.rs::ParticleEngine::add_with	always-show flag set
 ClientLevel.doAddParticle	port	crates/horizon-client-render/src/particles.rs::ParticleEngine::add_with	drops particles beyond 32 blocks and at minimal particle level
-ClientLevel.getSkyFlashTime	inline	crates/horizon-client/src/game.rs::Game::render	the flash check with the hideLightningFlashes option
+ClientLevel.getSkyFlashTime	inline	crates/horizon-client/src/game/mod.rs::Game::render	the flash check with the hideLightningFlashes option
 ClientLevel.calculateBlockTint	port	crates/horizon-client-render/src/mesher.rs::MeshTables::terrain_particle_tint	gap: minor: returns none for grass-block tints
 ClientLevel.playBreakingSound	port	crates/horizon-client/src/game/level_particles.rs::Game::breaking_block_effects	the block's hit sound while digging
 ClientLevel.getClientLeafTintColor	port	crates/horizon-client/src/animate_tick.rs::AnimateContext::foliage	leaf tint for tinted leaves particles; the caller is TintedParticleLeavesBlock

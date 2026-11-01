@@ -110,7 +110,7 @@ ShelfBlock.swapSingleItem	inline	crates/horizon-client/src/game/shelf.rs::Game::
 ShelfBlock.swapHotbar	inline	crates/horizon-client/src/game/shelf.rs::Game::use_shelf	the powered chain's hotbar swap is the `powered` arm of `use_shelf`
 ShelfBlock.getFluidState	port	crates/horizon-world/src/registry_fluid.rs::RegistryFluidWorld::fluid_state	waterlogged state from block data
 ShelfBlock.updateShape	port	crates/horizon-world/src/level/shapes.rs::Sim::update_shape_class	
-ShulkerBoxBlock.useWithoutItem	port	crates/horizon-client/src/game.rs::Game::open_menu	opens the box and awards the open stat; canOpen via shulker_can_open
+ShulkerBoxBlock.useWithoutItem	port	crates/horizon-client/src/game/mod.rs::Game::open_menu	opens the box and awards the open stat; canOpen via shulker_can_open
 ShulkerBoxBlock.playerWillDestroy	port	crates/horizon-world/src/level/removal.rs::pre_remove	gap: minor: only classifies the box as keeping its contents; the break itself is not in this fn
 ShulkerBoxBlock.getDrops	port	crates/horizon-world/src/level/removal.rs::pre_remove	gap: minor: the contents kept on the dropped box come from the same kind; the loot drop is not traced here
 ShulkerBoxBlock.getBlockSupportShape	missing		unsure: shulker_is_closed returns None in the level and the client, so an open box keeps the full cube as its support shape
@@ -131,7 +131,7 @@ SideChainPartBlock.SideChainNeighbor.disconnectFromLeft	port	crates/horizon-worl
 SignBlock.updateShape	port	crates/horizon-world/src/level/shapes.rs::Sim::update_shape_class	waterlogged water tick
 SignBlock.getFluidState	port	crates/horizon-world/src/registry_fluid.rs::RegistryFluidWorld::fluid_state	waterlogged state from block data
 SignBlock.otherPlayerIsEditingSign	missing		unsure: minor: no check that another player is editing the sign; sign_edit.rs tracks sign_editing per connection only
-SignBlock.setPlacedBy	port	crates/horizon-client/src/game.rs::Game::use_hand	gap: minor: the sign editor opens after a sign is placed; no allowed-editor player is stored
+SignBlock.setPlacedBy	port	crates/horizon-client/src/game/mod.rs::Game::use_hand	gap: minor: the sign editor opens after a sign is placed; no allowed-editor player is stored
 SnifferEggBlock.onPlace	port	crates/horizon-world/src/level/hooks.rs::Sim::on_place	sniffer egg arm: moss boost, place event and the hatch timer
 SnowLayerBlock.isPathfindable	skip:data		path types come from the per-state path data (mobs/path.rs)
 SnowLayerBlock.getShadeBrightness	missing		unsure: minor: no shade brightness lookup for snow layers found; vanilla returns 0.2 for a full eight layer block

@@ -5,33 +5,33 @@ AbstractCommandBlockEditScreen.onDone	port	crates/horizon-client/src/game/comman
 AbstractCommandBlockEditScreen.mouseScrolled	missing		no command suggestion list in the command block screen, so no wheel scrolling of suggestions
 AbstractCommandBlockEditScreen.mouseClicked	port	crates/horizon-client/src/game/command_blocks.rs::Game::command_block_click	buttons only; clicking inside the command box does not move the cursor and there are no suggestions to click
 AbstractCommandBlockEditScreen.extractRenderState	port	crates/horizon-client/src/game/command_blocks.rs::Game::draw_command_block	
-AbstractContainerScreen.extractRenderState	port	crates/horizon-client/src/game.rs::Game::draw_inventory	contents, carried item, tooltip in vanilla order
-AbstractContainerScreen.extractContents	inline	crates/horizon-client/src/game.rs::Game::draw_inventory	labels, slots and hover highlight
-AbstractContainerScreen.extractCarriedItem	port	crates/horizon-client/src/game.rs::Game::draw_carried	shows what a quick-craft drag leaves in hand
-AbstractContainerScreen.extractSlots	port	crates/horizon-client/src/game.rs::Game::draw_inventory_slots	
+AbstractContainerScreen.extractRenderState	port	crates/horizon-client/src/game/mod.rs::Game::draw_inventory	contents, carried item, tooltip in vanilla order
+AbstractContainerScreen.extractContents	inline	crates/horizon-client/src/game/mod.rs::Game::draw_inventory	labels, slots and hover highlight
+AbstractContainerScreen.extractCarriedItem	port	crates/horizon-client/src/game/mod.rs::Game::draw_carried	shows what a quick-craft drag leaves in hand
+AbstractContainerScreen.extractSlots	port	crates/horizon-client/src/game/mod.rs::Game::draw_inventory_slots	
 AbstractContainerScreen.mouseScrolled	port	crates/horizon-client/src/game/bundles.rs::Game::bundle_scroll	the bundle wheel is the only ItemSlotMouseAction
 AbstractContainerScreen.extractSlotHighlightBack	missing		hover highlight is a flat 50% white square on top of the item; vanilla draws the 24x24 slot_highlight_back sprite behind it, and Slot.isHighlightable is not modelled
 AbstractContainerScreen.extractSlotHighlightFront	missing		no slot_highlight_front sprite over the item (see extractSlotHighlightBack)
 AbstractContainerScreen.extractTooltip	port	crates/horizon-client/src/game/stations.rs::Game::draw_slot_tooltip	skipped while a stack is carried, even over a bundle
 AbstractContainerScreen.showTooltipWithItemInHand	missing		hovering a bundle while carrying a stack shows no tooltip; vanilla still shows the bundle contents
-AbstractContainerScreen.extractFloatingItem	port	crates/horizon-client/src/game.rs::Game::draw_carried	carried stack drawn at cursor minus 8
-AbstractContainerScreen.extractLabels	inline	crates/horizon-client/src/game.rs::Game::draw_inventory	title and Inventory labels are drawn per screen kind
+AbstractContainerScreen.extractFloatingItem	port	crates/horizon-client/src/game/mod.rs::Game::draw_carried	carried stack drawn at cursor minus 8
+AbstractContainerScreen.extractLabels	inline	crates/horizon-client/src/game/mod.rs::Game::draw_inventory	title and Inventory labels are drawn per screen kind
 AbstractContainerScreen.recalculateQuickCraftRemaining	port	crates/horizon-client/src/menu.rs::Menu::quick_craft_preview	returns the count left in hand
-AbstractContainerScreen.getHoveredSlot	port	crates/horizon-client/src/game.rs::Game::slot_at	
-AbstractContainerScreen.slotClicked	port	crates/horizon-client/src/game.rs::Game::menu_ops	includes the bundle unselect of onMouseClickAction; sent to the server on a remote game
-AbstractContainerScreen.mouseClicked	port	crates/horizon-client/src/game.rs::Game::inventory_press	press logic is container_screen::Clicks::press; double click gathers, Shift double click quick-moves all
-AbstractContainerScreen.mouseDragged	port	crates/horizon-client/src/game.rs::Game::inventory_drag_move	
-AbstractContainerScreen.isHovering	port	crates/horizon-client/src/game.rs::Game::slot_at	hit box is the 16x16 slot grown by one pixel on each side, like vanilla
-AbstractContainerScreen.onMouseClickAction	inline	crates/horizon-client/src/game.rs::Game::menu_ops	Shift click or swap clears a bundle's selection
-AbstractContainerScreen.keyPressed	port	crates/horizon-client/src/game.rs::Game::inventory_hotkey	number keys, F and Q over a slot; keyPickItem bound to a keyboard key does not clone the hovered slot
-AbstractContainerScreen.checkHotbarKeyPressed	port	crates/horizon-client/src/game.rs::Game::inventory_hotkey	hotbar and off hand swaps while the hand is empty
-AbstractContainerScreen.removed	port	crates/horizon-client/src/game.rs::Game::close_container	carried stack and crafting grid go back to the inventory or are thrown
+AbstractContainerScreen.getHoveredSlot	port	crates/horizon-client/src/game/mod.rs::Game::slot_at	
+AbstractContainerScreen.slotClicked	port	crates/horizon-client/src/game/mod.rs::Game::menu_ops	includes the bundle unselect of onMouseClickAction; sent to the server on a remote game
+AbstractContainerScreen.mouseClicked	port	crates/horizon-client/src/game/mod.rs::Game::inventory_press	press logic is container_screen::Clicks::press; double click gathers, Shift double click quick-moves all
+AbstractContainerScreen.mouseDragged	port	crates/horizon-client/src/game/mod.rs::Game::inventory_drag_move	
+AbstractContainerScreen.isHovering	port	crates/horizon-client/src/game/mod.rs::Game::slot_at	hit box is the 16x16 slot grown by one pixel on each side, like vanilla
+AbstractContainerScreen.onMouseClickAction	inline	crates/horizon-client/src/game/mod.rs::Game::menu_ops	Shift click or swap clears a bundle's selection
+AbstractContainerScreen.keyPressed	port	crates/horizon-client/src/game/mod.rs::Game::inventory_hotkey	number keys, F and Q over a slot; keyPickItem bound to a keyboard key does not clone the hovered slot
+AbstractContainerScreen.checkHotbarKeyPressed	port	crates/horizon-client/src/game/mod.rs::Game::inventory_hotkey	hotbar and off hand swaps while the hand is empty
+AbstractContainerScreen.removed	port	crates/horizon-client/src/game/mod.rs::Game::close_container	carried stack and crafting grid go back to the inventory or are thrown
 AbstractContainerScreen.tick	missing		no closeContainer for a dead player: death only swaps to the death screen, so a chest or furnace open at death stays counted as open (lid up)
-AbstractContainerScreen.quickCraftToSlots	port	crates/horizon-client/src/game.rs::Game::inventory_release	start, one add per slot, end
-AbstractContainerScreen.onClose	port	crates/horizon-client/src/game.rs::Game::close_container	closes the container and clears the bundle selection
-AbstractFurnaceScreen.init	inline	crates/horizon-client/src/game.rs::Game::draw_inventory	furnace arm centres the title
+AbstractContainerScreen.quickCraftToSlots	port	crates/horizon-client/src/game/mod.rs::Game::inventory_release	start, one add per slot, end
+AbstractContainerScreen.onClose	port	crates/horizon-client/src/game/mod.rs::Game::close_container	closes the container and clears the bundle selection
+AbstractFurnaceScreen.init	inline	crates/horizon-client/src/game/mod.rs::Game::draw_inventory	furnace arm centres the title
 AbstractFurnaceScreen.getRecipeBookButtonPosition	port	crates/horizon-client/src/game/recipe_book.rs::Game::book_button_pos	
-AbstractFurnaceScreen.extractBackground	inline	crates/horizon-client/src/game.rs::Game::draw_inventory	furnace arm draws the flame and the arrow
+AbstractFurnaceScreen.extractBackground	inline	crates/horizon-client/src/game/mod.rs::Game::draw_inventory	furnace arm draws the flame and the arrow
 AbstractMountInventoryScreen.extractBackground	port	crates/horizon-client/src/game/mount_menu.rs::Game::draw_mount_background	texture, chest slots, saddle and armor slot frames, mount preview
 AbstractMountInventoryScreen.extractRenderState	inline	crates/horizon-client/src/game/mount_menu.rs::Game::draw_mount_background	the preview follows the cursor position
 AbstractRecipeBookScreen.init	port	crates/horizon-client/src/game/recipe_book.rs::Game::recipe_book_shift	narrow test and left position shift
@@ -116,7 +116,7 @@ CrafterScreen.extractDisabledSlot	port	crates/horizon-client/src/screen_layout.r
 CrafterScreen.extractRenderState	port	crates/horizon-client/src/game/machines/crafter.rs::Game::draw_crafter_screen	the Click to disable slot tooltip is crafter_tooltip
 CrafterScreen.extractRedstone	port	crates/horizon-client/src/screen_layout.rs::crafter	powered or unpowered arrow
 CraftingScreen.getRecipeBookButtonPosition	port	crates/horizon-client/src/game/recipe_book.rs::Game::book_button_pos	
-CraftingScreen.extractBackground	inline	crates/horizon-client/src/game.rs::Game::draw_inventory	crafting table texture
+CraftingScreen.extractBackground	inline	crates/horizon-client/src/game/mod.rs::Game::draw_inventory	crafting table texture
 CreativeModeInventoryScreen.tryRefreshInvalidatedTabs	missing		tabs are read once from creative-inventory.json; they are not rebuilt when feature flags, permissions or datapacks change (no Operator Utilities tab)
 CreativeModeInventoryScreen.tryRebuildTabContents	missing		same as tryRefreshInvalidatedTabs; the search trees are not rebuilt either
 CreativeModeInventoryScreen.refreshCurrentTabContents	inline	crates/horizon-client/src/creative.rs::Creative::items	the grid is worked out again when the tab, search or language changed
@@ -128,17 +128,17 @@ CreativeModeInventoryScreen.charTyped	port	crates/horizon-client/src/game/clipbo
 CreativeModeInventoryScreen.preeditUpdated	missing		no IME composition text in the search box
 CreativeModeInventoryScreen.isInputCaptured	inline	crates/horizon-client/src/game/debug_keys.rs::Game::debug_key	typing gate for the search tab; vanilla only uses it to stop the friends hotkey
 CreativeModeInventoryScreen.updateVisibleTags	missing		a # tag search does not list the matching tags in item tooltips
-CreativeModeInventoryScreen.extractLabels	inline	crates/horizon-client/src/game.rs::Game::draw_creative	tab title at 8,6 except on the inventory tab
+CreativeModeInventoryScreen.extractLabels	inline	crates/horizon-client/src/game/mod.rs::Game::draw_creative	tab title at 8,6 except on the inventory tab
 CreativeModeInventoryScreen.mouseReleased	port	crates/horizon-client/src/creative.rs::Creative::release	ends the scrollbar drag; tabs are selected on press, not on release
 CreativeModeInventoryScreen.mouseScrolled	port	crates/horizon-client/src/creative.rs::Creative::wheel	
-CreativeModeInventoryScreen.hasClickedOutside	port	crates/horizon-client/src/game.rs::Game::clicked_outside	creative window size; tab clicks are handled before it in click_creative
+CreativeModeInventoryScreen.hasClickedOutside	port	crates/horizon-client/src/game/mod.rs::Game::clicked_outside	creative window size; tab clicks are handled before it in click_creative
 CreativeModeInventoryScreen.mouseDragged	port	crates/horizon-client/src/creative.rs::Creative::drag_scrollbar	
-CreativeModeInventoryScreen.extractRenderState	port	crates/horizon-client/src/game.rs::Game::draw_creative	trash tooltip text is fixed English; no pointing-hand or resize cursor over tabs and the scrollbar
+CreativeModeInventoryScreen.extractRenderState	port	crates/horizon-client/src/game/mod.rs::Game::draw_creative	trash tooltip text is fixed English; no pointing-hand or resize cursor over tabs and the scrollbar
 CreativeModeInventoryScreen.getTooltipFromContainerItem	missing		item tooltips in the creative screen do not list the tabs that hold the item (blue lines) or, in a # search, the matching tags (purple)
 CreativeModeInventoryScreen.getTabY	port	crates/horizon-client/src/creative.rs::Creative::tab_position	click area uses the drawn tab position, 4 px off vanilla's -32 / image height
-CreativeModeInventoryScreen.checkTabClicked	inline	crates/horizon-client/src/game.rs::Game::click_creative	loop over the tab rectangles
-CreativeModeInventoryScreen.checkTabHovering	inline	crates/horizon-client/src/game.rs::Game::draw_creative	tab title tooltip
-CreativeModeInventoryScreen.extractTabButton	inline	crates/horizon-client/src/game.rs::Game::draw_creative	tab sprite and icon item
+CreativeModeInventoryScreen.checkTabClicked	inline	crates/horizon-client/src/game/mod.rs::Game::click_creative	loop over the tab rectangles
+CreativeModeInventoryScreen.checkTabHovering	inline	crates/horizon-client/src/game/mod.rs::Game::draw_creative	tab title tooltip
+CreativeModeInventoryScreen.extractTabButton	inline	crates/horizon-client/src/game/mod.rs::Game::draw_creative	tab sprite and icon item
 CreativeModeInventoryScreen.CustomCreativeSlot.mayPickup	missing		no CREATIVE_SLOT_LOCK or disabled-feature refusal on display slots; only matters for the saved hotbars tab, which Horizon does not have
 CreativeModeInventoryScreen.ItemPickerMenu.getRowIndexForScroll	port	crates/horizon-client/src/creative.rs::Creative::first_row	
 CreativeModeInventoryScreen.ItemPickerMenu.scrollTo	inline	crates/horizon-client/src/creative.rs::Creative::first_row	display slots are read from the first visible row when drawn and clicked

@@ -524,6 +524,14 @@ impl ApplicationHandler for Split<'_> {
         }
     }
 
+    /// Android: the surface is gone until the next `Resumed`, which
+    /// recreates the window and the renderer (`Game::suspend_android`).
+    #[cfg(target_os = "android")]
+    fn suspended(&mut self, _event_loop: &ActiveEventLoop) {
+        self.surfaces.clear();
+        self.host.suspend_android();
+    }
+
     fn window_event(&mut self, event_loop: &ActiveEventLoop, id: WindowId, event: WindowEvent) {
         if self.surfaces.is_empty() {
             return self.host.window_event(event_loop, id, event);

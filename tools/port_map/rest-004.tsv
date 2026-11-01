@@ -96,8 +96,8 @@ InputWithModifiers.isCut	port	crates/horizon-client-input/src/clipboard.rs::edit
 PreeditEvent.fromSdlTextEditing	missing		player: IME composition text (Japanese or Chinese input) is not shown while composing; no IME events are handled
 PreeditEvent.toFormattedText	missing		player: same as fromSdlTextEditing
 GameConfig.FolderData.getExternalAssetSource	skip:data		Horizon reads assets from the prepared resources folder
-net/minecraft/client/main/Main#getQuickPlayVariant	port	crates/horizon-client/src/game.rs::Options::read	gap: minor: only the quick play flags of the launch parser; realms branch not checked
-net/minecraft/client/main/Main#parseArgument	inline	crates/horizon-client/src/game.rs::Options::read	
+net/minecraft/client/main/Main#getQuickPlayVariant	port	crates/horizon-client/src/game/mod.rs::Options::read	gap: minor: only the quick play flags of the launch parser; realms branch not checked
+net/minecraft/client/main/Main#parseArgument	inline	crates/horizon-client/src/game/mod.rs::Options::read	
 net/minecraft/client/main/Main#hasValidUuid	missing		minor: unsure: no --uuid argument found in the client
 net/minecraft/client/main/Main#isUuidValid	missing		minor: unsure: see hasValidUuid
 AbstractClientPlayer.getPlayerInfo	missing		minor: unsure: no per-player tab entry lookup found on the client
@@ -124,7 +124,7 @@ LocalPlayer.moveTowardsClosestSpace	missing		player: you are not nudged out of b
 LocalPlayer.suffocatesAt	missing		player: no suffocation test for the corner nudge (see moveTowardsClosestSpace)
 LocalPlayer.setExperienceDisplayStartTickToTickCount	inline	crates/horizon-client/src/game/locator_bar.rs::Game::track_experience_display	
 LocalPlayer.handleEntityEvent	port	crates/horizon-client/src/game/remote.rs::Game::handle_packet	gap: minor: only the permission events 24 to 28 of the local player
-LocalPlayer.startUsingItem	port	crates/horizon-client/src/game.rs::Game::use_hand	
+LocalPlayer.startUsingItem	port	crates/horizon-client/src/game/mod.rs::Game::use_hand	
 LocalPlayer.isSlowDueToUsingItem	missing		player: sprinting is not blocked while eating or drawing a bow; sprint_input_tick never sets slow_item
 LocalPlayer.onSyncedDataUpdated	missing		minor: unsure: server living flags and the elytra start sound are not applied to the local player
 LocalPlayer.jumpableVehicle	inline	crates/horizon-client/src/game/mounts.rs::Game::charge_mount_jump	gap: minor: saddle and jump-capable check only; no separate vehicle lookup
@@ -143,6 +143,6 @@ LocalPlayer.canStartSprinting	port	crates/horizon-client/src/sprint.rs::Conditio
 LocalPlayer.onGameModeChanged	missing		minor: switching to spectator keeps vertical momentum
 LocalPlayer.getRopeHoldPosition	missing		player: no leash or lead rope exists in Horizon, so no rope is drawn
 LocalPlayer.raycastHitResult	port	crates/horizon-client/src/game/hand.rs::GameHands::hit	gap: minor: block fallback is Game::pick; no separate item attack-range pass
-LocalPlayer.filterHitResult	inline	crates/horizon-client/src/game.rs::Game::pick	gap: minor: reach is applied inside the clip; no miss direction is returned
+LocalPlayer.filterHitResult	inline	crates/horizon-client/src/game/mod.rs::Game::pick	gap: minor: reach is applied inside the clip; no miss direction is returned
 LocalPlayerResolver.fetchByName	missing		minor: unsure: no player-list lookup by name on the client
 LocalPlayerResolver.fetchById	missing		minor: unsure: no player-list lookup by id on the client

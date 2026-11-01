@@ -35,7 +35,7 @@ pub(super) fn show(looked_in: &std::path::Path, settings: &Settings) -> Result<(
         error: None,
     };
     horizon_client::hud::GUI_SCALE.store(settings.gui_scale, Ordering::Relaxed);
-    EventLoop::new()?.run_app(&mut app)?;
+    super::event_loop()?.run_app(&mut app)?;
     app.error.map_or(Ok(()), Err)
 }
 
@@ -126,6 +126,14 @@ impl ApplicationHandler for Missing {
                 event_loop.exit();
             }
         }
+    }
+
+    /// Android: the surface is gone until the next `Resumed`, which
+    /// recreates the window and the renderer.
+    #[cfg(target_os = "android")]
+    fn suspended(&mut self, _event_loop: &ActiveEventLoop) {
+        self.renderer = None;
+        self.window = None;
     }
 
     fn window_event(&mut self, event_loop: &ActiveEventLoop, id: WindowId, event: WindowEvent) {

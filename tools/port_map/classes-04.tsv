@@ -164,7 +164,7 @@ PotentSulfurBlockEntity.spawnNoxiousGasCloudParticle	port	crates/horizon-client/
 RandomizableContainerBlockEntity.applyImplicitComponents	missing		minor: a chest item does not hand its loot table back to the block
 RandomizableContainerBlockEntity.canOpen	missing		unsure: minor: the spectator and loot-table open checks were not found
 RandomizableContainerBlockEntity.collectImplicitComponents	missing		minor: a container does not save its loot table onto the item it drops
-RandomizableContainerBlockEntity.createMenu	port	crates/horizon-client/src/game.rs::Game::open_menu	gap: minor: the spectator and loot-table checks are not ported here
+RandomizableContainerBlockEntity.createMenu	port	crates/horizon-client/src/game/mod.rs::Game::open_menu	gap: minor: the spectator and loot-table checks are not ported here
 SculkSensorBlockEntity.loadAdditional	port	crates/horizon-client-render/src/sculk.rs::SculkEntity::load	
 SculkSensorBlockEntity.saveAdditional	port	crates/horizon-client-render/src/sculk.rs::SculkEntity::to_nbt	
 SculkSensorBlockEntity.VibrationUser.canReceiveVibration	port	crates/horizon-client-render/src/sculk.rs::valid_vibration	
@@ -197,7 +197,7 @@ FilteredSectionCache	skip:java		section cache for block scans
 OrderedBlockMatcher	skip:java		block scan helpers; Horizon scans with direct loops
 BulkSectionAccess	skip:java		section cache for bulk writes
 ChunkGenerators	skip:data		bootstrap
-ChunkSource.hasChunk	port	crates/horizon-client/src/game.rs::GameLevel::is_loaded	
+ChunkSource.hasChunk	port	crates/horizon-client/src/game/mod.rs::GameLevel::is_loaded	
 GlobalPalette	skip:java		palette storage; Horizon's chunk.rs keeps block ids in plain arrays
 HashMapPalette	skip:java		palette storage; Horizon's chunk.rs keeps block ids in plain arrays
 ImposterProtoChunk	skip:other		wrapper so the vanilla status pipeline can read a loaded chunk; streaming keeps its own protos

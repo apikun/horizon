@@ -289,7 +289,15 @@ pub use horizon_client_core::key_display::display_name;
 /// Q key shows A.
 pub fn learn_layout(event: &winit::event::KeyEvent) {
     use winit::keyboard::{Key, PhysicalKey};
-    use winit::platform::modifier_supplement::KeyEventExtModifierSupplement;
+    // `modifier_supplement` is desktop-only in winit; Android's events carry
+    // the soft keyboard's text in `logical_key` already.
+    #[cfg(target_os = "android")]
+    let without_modifiers = event.logical_key.clone();
+    #[cfg(not(target_os = "android"))]
+    let without_modifiers = {
+        use winit::platform::modifier_supplement::KeyEventExtModifierSupplement;
+        event.key_without_modifiers()
+    };
     let PhysicalKey::Code(code) = event.physical_key else {
         return;
     };
@@ -297,7 +305,7 @@ pub fn learn_layout(event: &winit::event::KeyEvent) {
         return;
     };
     let learn = horizon_client_core::key_display::learn_layout;
-    match event.key_without_modifiers() {
+    match without_modifiers {
         Key::Character(text) => learn(name, &text),
         Key::Dead(Some(c)) => learn(name, c.encode_utf8(&mut [0; 4])),
         _ => {}

@@ -123,8 +123,13 @@ pub trait Clipboard {
 /// data-control protocol and falls back to X11 (XWayland) on compositors
 /// without it. When no system clipboard can be reached, text copied in the
 /// game can still be pasted in the game.
+///
+/// Android: NativeActivity reaches the system clipboard only over JNI, so
+/// this keeps the last copied text in memory — copy and paste inside the
+/// game work; the system's clipboard is a later piece.
 #[derive(Default)]
 pub struct SystemClipboard {
+    #[cfg(not(target_os = "android"))]
     system: Option<arboard::Clipboard>,
     /// The text Horizon last copied (`horizon-ctl status`).
     copied: Option<String>,
@@ -135,6 +140,7 @@ impl SystemClipboard {
     pub fn copied(&self) -> Option<&str> {
         self.copied.as_deref()
     }
+    #[cfg(not(target_os = "android"))]
     fn system(&mut self) -> Option<&mut arboard::Clipboard> {
         if self.system.is_none() {
             self.system = arboard::Clipboard::new().ok();
@@ -145,16 +151,21 @@ impl SystemClipboard {
 
 impl Clipboard for SystemClipboard {
     fn get(&mut self) -> String {
-        let Some(system) = self.system() else {
-            return self.copied.clone().unwrap_or_default();
-        };
-        match system.get_text() {
-            Ok(text) => text,
-            Err(arboard::Error::ContentNotAvailable) => String::new(),
-            Err(_) => {
-                // A lost connection (a restarted compositor): reconnect next time.
-                self.system = None;
-                String::new()
+        #[cfg(target_os = "android")]
+        return self.copied.clone().unwrap_or_default();
+        #[cfg(not(target_os = "android"))]
+        {
+            let Some(system) = self.system() else {
+                return self.copied.clone().unwrap_or_default();
+            };
+            match system.get_text() {
+                Ok(text) => text,
+                Err(arboard::Error::ContentNotAvailable) => String::new(),
+                Err(_) => {
+                    // A lost connection (a restarted compositor): reconnect next time.
+                    self.system = None;
+                    String::new()
+                }
             }
         }
     }
@@ -163,6 +174,7 @@ impl Clipboard for SystemClipboard {
             return;
         }
         self.copied = Some(text.to_owned());
+        #[cfg(not(target_os = "android"))]
         if let Some(system) = self.system()
             && system.set_text(text.to_owned()).is_err()
         {

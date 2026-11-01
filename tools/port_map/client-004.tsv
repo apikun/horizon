@@ -18,12 +18,12 @@ EntityRenderDispatcher.extractEntity	skip:other		render-state wrapper with a cra
 EntityRenderDispatcher.fillRendererDetails	skip:debug		crash report detail
 EntityRenderDispatcher.onResourceManagerReload	skip:data		renderer rebuild on resource reload; Horizon loads its assets from files
 EntityRenderer.getBlockLightLevel	port	crates/horizon-client/src/game/creatures.rs::Game::mob_geometry	burning mobs drawn at full light (game/creatures.rs::Game::mob_geometry); other entities use world light
-EntityRenderer.submit	inline	crates/horizon-client/src/game.rs::Game::entity_geometry	leash ropes and name tags drawn in their own passes from there
+EntityRenderer.submit	inline	crates/horizon-client/src/game/mod.rs::Game::entity_geometry	leash ropes and name tags drawn in their own passes from there
 EntityRenderer.shouldShowName	port	crates/horizon-client/src/game/names.rs::Game::name_tags	named mob under the crosshair
 EntityRenderer.submitNameDisplay	port	crates/horizon-client/src/game/names.rs::Game::name_tag_geometry	
 EntityRenderer.createRenderState	skip:java		allocates the render-state object
-EntityRenderer.extractRenderState	inline	crates/horizon-client/src/game.rs::Game::entity_geometry	positions, invisibility, leash state, outline colour and light read there
-EntityRenderer.finalizeRenderState	inline	crates/horizon-client/src/game.rs::Game::entity_geometry	shadow pass after the entities
+EntityRenderer.extractRenderState	inline	crates/horizon-client/src/game/mod.rs::Game::entity_geometry	positions, invisibility, leash state, outline colour and light read there
+EntityRenderer.finalizeRenderState	inline	crates/horizon-client/src/game/mod.rs::Game::entity_geometry	shadow pass after the entities
 EntityRenderer.extractShadowPiece	port	crates/horizon-client/src/shadows.rs::shadow	block-top shadow pieces with fall-off
 EntityRenderer.getServerSideEntity	skip:other		no callers in vanilla (dead code)
 EntityRenderers.createEntityRenderers	skip:data		renderer registration table
@@ -31,11 +31,11 @@ EntityRenderers.createAvatarRenderers	skip:data		renderer registration table
 EntityRenderers.validateRegistrations	skip:debug		startup check that every type has a renderer
 EvokerFangsRenderer.submit	port	crates/horizon-client/src/game/fangs.rs::Game::fangs_geometry	bite progress and facing
 EvokerFangsRenderer.extractRenderState	inline	crates/horizon-client/src/game/fangs.rs::Game::fangs_geometry	yaw and bite progress read there
-ExperienceOrbRenderer.submit	inline	crates/horizon-client/src/game.rs::Game::entity_geometry	orb billboards with the pulsing colour, in the entity pass
-ExperienceOrbRenderer.vertex	inline	crates/horizon-client/src/game.rs::Game::entity_geometry	vertex built inline
+ExperienceOrbRenderer.submit	inline	crates/horizon-client/src/game/mod.rs::Game::entity_geometry	orb billboards with the pulsing colour, in the entity pass
+ExperienceOrbRenderer.vertex	inline	crates/horizon-client/src/game/mod.rs::Game::entity_geometry	vertex built inline
 FallingBlockRenderer.shouldRender	missing		minor: a falling block inside an identical block (vanilla hides it that tick) is still drawn; no such check in game.rs or falling_block.rs
-FallingBlockRenderer.submit	inline	crates/horizon-client/src/game.rs::Game::entity_geometry	falling block pass with its baked block model
-FallingBlockRenderer.extractRenderState	inline	crates/horizon-client/src/game.rs::Game::entity_geometry	position, state, biome tint and light read there
+FallingBlockRenderer.submit	inline	crates/horizon-client/src/game/mod.rs::Game::entity_geometry	falling block pass with its baked block model
+FallingBlockRenderer.extractRenderState	inline	crates/horizon-client/src/game/mod.rs::Game::entity_geometry	position, state, biome tint and light read there
 FireworkEntityRenderer.extractRenderState	port	crates/horizon-client/src/game/fireworks.rs::Game::rocket_geometry	angled rocket keeps its direction
 FishingHookRenderer.shouldRender	inline	crates/horizon-client/src/game/fishing.rs::Game::fishing_geometry	hook drawn only with an owner
 FishingHookRenderer.submit	port	crates/horizon-client/src/game/fishing.rs::Game::fishing_geometry	hook quad and line

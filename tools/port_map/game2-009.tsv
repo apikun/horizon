@@ -136,4 +136,4 @@ SlotDisplay.WithAnyPotion.resolve	missing		unsure: no any-potion display list fo
 SlotDisplay.WithRemainder.resolve	missing		unsure: no remainder display found in Horizon's recipe book; remainders exist in Recipes::remainders for play
 SlotDisplay.WithRemainder.isEnabled	missing		minor: no feature flag check for the remainder display
 BlockPlaceContext.at	port	crates/horizon-world/src/level/place.rs::Sim::placement_at	the placement position and face from the clicked block
-UseOnContext.isSecondaryUseActive	port	crates/horizon-client/src/game.rs::Game::use_hand	the shift key sets the context's sneaking flag
+UseOnContext.isSecondaryUseActive	port	crates/horizon-client/src/game/mod.rs::Game::use_hand	the shift key sets the context's sneaking flag
